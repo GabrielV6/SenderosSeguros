@@ -29,8 +29,8 @@ tools:context=".LoginFragment">
         app:layout_constraintTop_toTopOf="@+id/SSimg" />
 
     <LinearLayout
-        android:layout_width="355dp"
-        android:layout_height="313dp"
+        android:layout_width="314dp"
+        android:layout_height="309dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,36 +40,47 @@ tools:context=".LoginFragment">
         <EditText
             android:id="@+id/et_user"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:ems="10"
             android:hint="Usuario"
             android:inputType="text"
-            android:text="" />
+            android:text=""
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/et_pass"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:ems="10"
             android:hint="Contraseña"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
+            android:layout_gravity="bottom"
+            android:padding="10dp"
             android:text="@string/btn_ingresar"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tv_regis"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:paddingTop="10dp"
             android:text="@string/tv_registrarse"
             android:textAlignment="center"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
