@@ -10,4 +10,11 @@
     <string name="menu_home">Home</string>
     <string name="menu_reporte">Informe de Obstaculos</string>
     <string name="menu_slideshow">Slideshow</string>
+
+    <string name="tv_ss"> SENDEROS\nSEGUROS </string>
+    <string name="btn_ingresar"> INGRESAR </string>
+    <string name="tv_registrarse"> No tenes cuenta? Registrate aqui </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
