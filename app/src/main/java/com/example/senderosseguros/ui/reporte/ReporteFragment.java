@@ -1,4 +1,4 @@
-package com.example.senderosseguros.ui.gallery;
+package com.example.senderosseguros.ui.reporte;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.senderosseguros.databinding.FragmentGalleryBinding;
+import com.example.senderosseguros.databinding.FragmentReporteBinding;
 
-public class GalleryFragment extends Fragment {
+public class ReporteFragment extends Fragment {
 
-    private FragmentGalleryBinding binding;
+    private FragmentReporteBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        GalleryViewModel galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
+        ReporteViewModel reporteViewModel =
+                new ViewModelProvider(this).get(ReporteViewModel.class);
 
-        binding = FragmentGalleryBinding.inflate(inflater, container, false);
+        binding = FragmentReporteBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textGallery;
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textReporte;
+        reporteViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

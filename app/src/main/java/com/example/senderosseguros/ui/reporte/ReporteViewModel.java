@@ -1,16 +1,16 @@
-package com.example.senderosseguros.ui.gallery;
+package com.example.senderosseguros.ui.reporte;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
+public class ReporteViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public GalleryViewModel() {
+    public ReporteViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        mText.setValue("INFORME DE OBSTACULOS");
     }
 
     public LiveData<String> getText() {
