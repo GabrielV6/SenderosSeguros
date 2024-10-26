@@ -22,4 +22,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="generar_button">GENERAR</string>
+    <string name="sp_barrio">Seleccione barrio</string>
+    <string name="sp_tipo">Seleccione tipo de obstaculo</string>
+    <string name="sp_periodo">Seleccione período</string>
+    <string name="boton_volver">"Volver"</string>
 </resources>

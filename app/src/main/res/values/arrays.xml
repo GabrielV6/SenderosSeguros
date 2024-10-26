@@ -1,0 +1,23 @@
+<resources>
+    <string-array name="barrio_options">
+        <item>@string/sp_barrio</item>
+        <item>Belgrano</item>
+        <item>Palermo</item>
+        <item>Villa Urquiza</item>
+    </string-array>
+    <string-array name="tipo_options">
+        <item>@string/sp_tipo</item>
+        <item>Sin Rampa</item>
+        <item>Obra</item>
+        <item>Piso Resbaladizo</item>
+        <item>Peligro</item>
+        <item>Cierre</item>
+        <item>Vereda Bloqueada</item>
+    </string-array>
+    <string-array name="periodo_options">
+        <item>@string/sp_periodo</item>
+        <item>Ultimo mes</item>
+        <item>Ultimos 3 meses</item>
+        <item>Ultimos 6 meses</item>
+    </string-array>
+</resources>
