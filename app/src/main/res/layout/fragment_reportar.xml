@@ -1,5 +1,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#C6F4B5"
@@ -21,51 +22,77 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
+        android:id="@+id/subtitle_tipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipo"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="126dp" />
+
+    <TextView
+        android:id="@+id/subtitle_descripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descripcion"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="226dp" />
+
+
+    <TextView
         android:id="@+id/type_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="VEREDA BLOQUEADA"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:padding="12dp"
-        android:textColor="@color/white"
+        android:layout_marginTop="104dp"
         android:background="@drawable/custom_button_background"
-        app:layout_constraintTop_toBottomOf="@id/title_reportar"
-        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="VEREDA BLOQUEADA"
+        android:textColor="@color/white"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.8"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_reportar"
+        app:layout_constraintWidth_percent="0.8" />
 
     <EditText
         android:id="@+id/description_edit_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Descripción"
-        android:text="La empresa EDENOR está llevando a cabo arreglos en la vereda que obstaculizan parcialmente la misma."
-        android:textSize="16sp"
-        android:minHeight="100dp"
-        android:textColor="@color/white"
+        android:layout_width="294dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="64dp"
         android:background="@drawable/custom_button_background"
-        android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@id/type_spinner"
-        app:layout_constraintStart_toStartOf="parent"
+        android:hint="Descripción"
+        android:minHeight="100dp"
+        android:padding="18dp"
+        android:text="La empresa EDENOR está llevando a cabo arreglos en la vereda que obstaculizan parcialmente la misma."
+        android:textColor="@color/white"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.8"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/type_spinner"
+        app:layout_constraintWidth_percent="0.8" />
 
     <Button
         android:id="@+id/upload_image_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Cargar Imagen"
-        android:textSize="16sp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/custom_button_background"
+        android:text="Cargar Imagen"
         android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/description_edit_text"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.8"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/description_edit_text"
+        app:layout_constraintWidth_percent="0.8" />
 
     <Button
         android:id="@+id/report_button"
@@ -73,7 +100,7 @@
         android:layout_height="wrap_content"
         android:text="REPORTAR OBSTACULO"
         android:textSize="18sp"
-        android:background="@color/purple_500"
+        android:background="@drawable/custom_button_background"
         android:textColor="@color/white"
         android:padding="16dp"
         app:layout_constraintTop_toBottomOf="@id/upload_image_button"
