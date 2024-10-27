@@ -14,7 +14,7 @@
             android:title="@string/menu_reporte" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_map"
             android:title="@string/menu_slideshow" />
         <item
             android:id="@+id/nav_reportar"
