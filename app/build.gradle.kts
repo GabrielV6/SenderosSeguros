@@ -58,4 +58,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
+    implementation(libs.charts)
+
+
+
 }

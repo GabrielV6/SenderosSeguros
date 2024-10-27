@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:text="@string/menu_reporte"
         android:textAlignment="center"
@@ -34,7 +34,18 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/buttonVolver" />
-
+    <TextView
+        android:id="@+id/textUltimosTresMeses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ÚLTIMOS 3 MESES"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/text_reporte"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+         android:visibility="gone" /> <!-- Inicialmente invisible -->
     <Spinner
         android:id="@+id/spinnerBarrio"
         android:layout_width="0dp"
@@ -99,7 +110,7 @@
         android:id="@+id/radioButton"
         android:layout_width="374dp"
         android:layout_height="57dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="76dp"
         android:text="Generar por Barrio"
         android:textColor="#121212"
         app:layout_constraintEnd_toEndOf="parent"
@@ -130,5 +141,22 @@
         app:layout_constraintHorizontal_bias="0.351"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerObstaculo" />
+
+    <!-- BarChart -->
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:id="@+id/barChart"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/text_reporte"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"/> <!-- Inicialmente invisible -->
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

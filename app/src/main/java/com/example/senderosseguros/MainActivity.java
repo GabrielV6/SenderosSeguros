@@ -19,7 +19,7 @@ import com.example.senderosseguros.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private ActivityMainBinding binding;
+    public ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
