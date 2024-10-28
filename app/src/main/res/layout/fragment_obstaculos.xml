@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.slideshow.SlideshowFragment">
 
-
     <fragment
         android:id="@+id/mapView"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -22,18 +21,15 @@
 
     <FrameLayout
         android:id="@+id/frameLayout"
-        android:layout_width="411dp"
-        android:layout_height="313dp"
+        android:layout_width="374dp"
+        android:layout_height="322dp"
         android:background="#80000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.823">
-
-        <!-- Aquí podrías agregar una vista de fondo o cualquier otro elemento que quieras difuminar -->
-        <!-- Por ejemplo, un ImageView que contenga una imagen de fondo -->
+        app:layout_constraintVertical_bias="0.963">
 
         <GridLayout
             android:id="@+id/gridLayout"
@@ -203,5 +199,4 @@
         </GridLayout>
     </FrameLayout>
 
-    <!-- Contenedor para los iconos, anclado a la parte inferior -->
 </androidx.constraintlayout.widget.ConstraintLayout>

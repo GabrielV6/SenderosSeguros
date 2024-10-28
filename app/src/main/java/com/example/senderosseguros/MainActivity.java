@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null)
                         .setAnchorView(R.id.fab).show();
+                //ACA debe ir el llamado del CATALOGO de obstaculos que esta en el fragmentobstaculo
+
             }
         });
         DrawerLayout drawer = binding.drawerLayout;
