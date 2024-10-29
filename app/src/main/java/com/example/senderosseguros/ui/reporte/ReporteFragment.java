@@ -35,14 +35,6 @@ public class ReporteFragment extends Fragment {
         binding = FragmentReporteBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-
-        // Ocultar el botón flotante (FAB) al iniciar el fragmento
-        MainActivity mainActivity = (MainActivity) getActivity();
-        if (mainActivity != null) {
-            mainActivity.binding.appBarMain.fab.setVisibility(View.GONE);
-        }
-
-
         // Inicializar los Spinners
         setupSpinners();
 

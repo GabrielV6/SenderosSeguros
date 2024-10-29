@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.Snackbar;
 
 public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
 
@@ -61,6 +63,25 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
+
+        //Botón para reportar obstáculos
+        //Botón para reportar obstáculos
+        //Botón para reportar obstáculos
+        // Botón para reportar obstáculos
+        binding.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Obtén la referencia al FrameLayout usando binding
+                FrameLayout frameLayout = binding.frameLayout;
+
+                // Alterna la visibilidad del FrameLayout
+                if (frameLayout.getVisibility() == View.VISIBLE) {
+                    frameLayout.setVisibility(View.GONE); // Ocultar si está visible
+                } else {
+                    frameLayout.setVisibility(View.VISIBLE); // Mostrar si está oculto
+                }
+            }
+        });
 
         return root;
     }
