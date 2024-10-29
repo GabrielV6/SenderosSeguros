@@ -11,14 +11,15 @@
     <fragment
         android:id="@+id/mapView"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="393dp"
-        android:layout_height="657dp"
+        android:layout_width="412dp"
+        android:layout_height="731dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.17" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/like"
@@ -28,6 +29,7 @@
         android:layout_marginTop="444dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_dialog_like"
+        android:visibility="invisible"
         app:backgroundTint="#1681D9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/mapView" />
@@ -40,6 +42,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="444dp"
         android:src="@drawable/ic_dialog_trash"
+        android:visibility="invisible"
         app:backgroundTint="#F62F21"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/mapView" />
@@ -238,6 +241,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_dialog_alert" />
+
+    <EditText
+        android:id="@+id/etGo"
+        android:layout_width="322dp"
+        android:layout_height="42dp"
+        android:background="@drawable/edittext_border"
+        android:ems="10"
+        android:hint="¿A donde vas?"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="@+id/fab"
+        app:layout_constraintHorizontal_bias="0.209"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="16dp" />
 
     <!-- Contenedor para los iconos, anclado a la parte inferior -->
 </androidx.constraintlayout.widget.ConstraintLayout>
