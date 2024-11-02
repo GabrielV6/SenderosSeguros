@@ -28,6 +28,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            resValue("string", "google_maps_key", mapsApiKey)
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -58,8 +61,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
+    implementation(libs.android.maps.utils)
     implementation(libs.charts)
-
-
-
+    implementation(libs.volley)
 }
