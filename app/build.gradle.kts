@@ -61,7 +61,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
-    implementation(libs.android.maps.utils)
     implementation(libs.charts)
-    implementation(libs.volley)
+    implementation("com.android.volley:volley:1.2.1")
+    implementation("com.google.maps.android:android-maps-utils:2.3.0")
 }
