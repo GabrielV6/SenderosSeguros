@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -51,6 +52,9 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
     private FusedLocationProviderClient fusedLocationClient;
     private static final String TAG = "Mis mapas";
     private RequestQueue requestQueue;
+    private LatLng punto1, punto2; // Variables para guardar las coordenadas de dos puntos
+    private boolean isFirstPoint = true; // Variable para alternar entre el primer y segundo punto
+    private LatLng puntoSeleccionado; // Variable para guardar las coordenadas
 
     // Register the permissions launcher
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher =
@@ -119,6 +123,30 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         uiSettings.setTiltGesturesEnabled(true);
         uiSettings.setRotateGesturesEnabled(true);
 
+
+        // Habilita el listener para capturar clics en el mapa
+        mMap.setOnMapClickListener(latLng -> {
+            if (isFirstPoint) {
+                punto1 = latLng;
+                Toast.makeText(getContext(), "Punto 1 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_SHORT).show();
+            } else {
+                punto2 = latLng;
+                Toast.makeText(getContext(), "Punto 2 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_SHORT).show();
+            }
+
+            // Alterna para que el siguiente clic guarde el segundo punto (o el primero, si ya están ambos guardados)
+            isFirstPoint = !isFirstPoint;
+
+            // Limpia el mapa y agrega ambos puntos como marcadores (si existen)
+            mMap.clear();
+            if (punto1 != null) {
+                mMap.addMarker(new MarkerOptions().position(punto1).title("Punto 1"));
+            }
+            if (punto2 != null) {
+                mMap.addMarker(new MarkerOptions().position(punto2).title("Punto 2"));
+            }
+        });
+
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             enableLocation();
@@ -140,7 +168,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         // Sensor enabled
         String sensor = "sensor=false";
         // Modo de viaje
-        String mode = "mode=driving";
+        String mode = "mode=walking";
         // Construye los parámetros para el web service
         String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
         // Formato de salida
@@ -190,8 +218,8 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         polylineOptions.add(new LatLng(40.7128, -74.0060));
         polylineOptions.add(new LatLng(34.0522, -118.2437));
         mMap.addPolyline(polylineOptions);*/
-        LatLng origin = new LatLng(40.7128, -74.0060);
-        LatLng dest = new LatLng(34.0522, -118.2437);
+        LatLng origin = new LatLng(-34.45549129906697, -58.62413420527057);//-34.45549129906697, -58.62413420527057
+        LatLng dest = new LatLng(-34.455711234669025, -58.63267893194494);//-34.455711234669025, -58.63267893194494
         drawRoute(origin, dest);
     }
 
