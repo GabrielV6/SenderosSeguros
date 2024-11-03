@@ -1,5 +1,5 @@
 package com.example.senderosseguros.ui.slideshow;
-
+import com.example.senderosseguros.R;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment;
 import com.android.volley.BuildConfig;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.example.senderosseguros.R;
 import com.example.senderosseguros.databinding.FragmentSlideshowBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -88,6 +87,10 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         //Botón para reportar obstáculos
         //Botón para reportar obstáculos
         // Botón para reportar obstáculos
+
+        // Configura los OnClickListeners para las opciones
+        setUpOptionButtons();
+
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,6 +109,20 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
 
+    private void setUpOptionButtons() {
+        binding.iconOption1.setOnClickListener(v -> handleOptionSelection("Obra"));
+        binding.iconOption2.setOnClickListener(v -> handleOptionSelection("Piso Resbaladizo"));
+        binding.iconOption3.setOnClickListener(v -> handleOptionSelection("Rampa"));
+        binding.iconOption4.setOnClickListener(v -> handleOptionSelection("Peligro"));
+        binding.iconOption5.setOnClickListener(v -> handleOptionSelection("Cierre"));
+        binding.iconOption6.setOnClickListener(v -> handleOptionSelection("Vereda bloqueada"));
+    }
+
+    private void handleOptionSelection(String option) {
+        Toast.makeText(getContext(), "Opción seleccionada: " + option, Toast.LENGTH_SHORT).show();
+        // TO DO: ACA VA LA LOGICA PARA PROCESAR EL OBSTACULO REPORTADO...
+
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -246,4 +263,6 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             Log.e(TAG, "Verifique los permisos de ubicacion: ", e);
         }
     }
+
+
 }
