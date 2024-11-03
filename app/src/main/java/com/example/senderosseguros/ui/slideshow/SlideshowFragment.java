@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.android.volley.BuildConfig;
 import com.android.volley.RequestQueue;
@@ -120,8 +122,14 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
 
     private void handleOptionSelection(String option) {
         Toast.makeText(getContext(), "Opción seleccionada: " + option, Toast.LENGTH_SHORT).show();
+        binding.frameLayout.setVisibility(View.GONE);
         // TO DO: ACA VA LA LOGICA PARA PROCESAR EL OBSTACULO REPORTADO...
 
+        Bundle bundle = new Bundle();
+        bundle.putString("selected_option", option); // Pasar la opción seleccionada
+
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+        navController.navigate(R.id.nav_reportar, bundle);
     }
     @Override
     public void onDestroyView() {
