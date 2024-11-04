@@ -64,4 +64,6 @@ dependencies {
     implementation(libs.charts)
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.google.maps.android:android-maps-utils:2.3.0")
+    implementation ("org.postgresql:postgresql:42.2.20")
+
 }

@@ -48,7 +48,7 @@ public class LoginFragment extends Fragment {
         }
 
     public void btnLogin_Click(View view) {
-        /*MyDatabaseHelper myDbHelper = new MyDatabaseHelper(this.getView().getContext());
+        /*DataDB myDbHelper = new DataDB(this.getView().getContext());
         EditText etUserName = this.getView().findViewById(R.id.txtName);
         String userName = etUserName.getText().toString().trim();
         EditText etPass = this.getView().findViewById(R.id.txtPass);

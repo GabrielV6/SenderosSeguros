@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,9 +23,10 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import java.util.ArrayList;
 import java.util.List;
+import com.example.senderosseguros.AccesoDatos;
 
 public class ReporteFragment extends Fragment {
-
+    private TextView textUltimosTresMeses;
     private FragmentReporteBinding binding;
     private HorizontalBarChart barChart; // Cambiar a HorizontalBarChart
 
@@ -70,6 +73,14 @@ public class ReporteFragment extends Fragment {
     }
 
     private void mostrarGrafico() {
+        // Supongamos que tienes un mEtodo que obtiene el texto de la BD.
+        AccesoDatos accesoDatos = new AccesoDatos();
+        String textoDesdeBD = accesoDatos.obtenerTextoDesdeBD();
+
+        // Seteas el valor del texto en el componente textUltimosTresMeses.
+        textUltimosTresMeses.setText(textoDesdeBD);
+
+
         // Ocultar elementos antes de mostrar el gráfico
         ocultarElementos();
 
