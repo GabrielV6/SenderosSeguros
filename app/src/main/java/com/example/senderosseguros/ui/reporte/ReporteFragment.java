@@ -49,8 +49,12 @@ public class ReporteFragment extends Fragment {
         buttonGenerar.setOnClickListener(v -> mostrarGrafico());
         buttonVolver.setOnClickListener(v -> mostrarElementos());
 
+        // Codigo para mostrar txtBarrio de prueba
+
+        textUltimosTresMeses = root.findViewById(R.id.textUltimosTresMeses);
         return root;
     }
+
 
     private void setupSpinners() {
         // Spinner para "Barrio"
@@ -73,13 +77,22 @@ public class ReporteFragment extends Fragment {
     }
 
     private void mostrarGrafico() {
-        // Supongamos que tienes un mEtodo que obtiene el texto de la BD.
+
         AccesoDatos accesoDatos = new AccesoDatos();
-        String textoDesdeBD = accesoDatos.obtenerTextoDesdeBD();
+        new Thread(() -> {
+            // Realiza la llamada a la base de datos en un hilo en segundo plano
+            int id = 3;
+            boolean existe = accesoDatos.obtenerTextoDesdeBD(id);
+            String texto = "";
+            if(existe){
+                texto = " FUNCIONA";
+            }
 
-        // Seteas el valor del texto en el componente textUltimosTresMeses.
-        textUltimosTresMeses.setText(textoDesdeBD);
-
+            // Actualiza la interfaz de usuario en el hilo principal
+            /*getActivity().runOnUiThread(() -> {
+                textUltimosTresMeses.setText(texto);
+            });*/
+        }).start();
 
         // Ocultar elementos antes de mostrar el gráfico
         ocultarElementos();
