@@ -49,7 +49,7 @@ android {
 }
 
 dependencies {
-    implementation ("mysql:mysql-connector-java:8.0.26")
+    implementation ("mysql:mysql-connector-java:5.1.26")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)

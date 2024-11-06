@@ -1,4 +1,4 @@
-package com.example.senderosseguros;
+package com.example.senderosseguros.conexion;
 
 public class DataDB {
     // Información de la BD
@@ -8,7 +8,7 @@ public class DataDB {
     public static String user="sql10742684";
     public static String pass="CFC1SdZ1Nl";
 
-    public static String urlMySQL = "jdbc:mysql://" + host + ":" + port + "/" + nameBD;
-    public static String driver = "com.mysql.cj.jdbc.Driver";
+    public static String urlMySQL = "jdbc:mysql://" + host + ":" + port + "/" + nameBD + "?useSSL=false&allowPublicKeyRetrieval=true";
+    public static String driver = "com.mysql.jdbc.Driver";
 }
 

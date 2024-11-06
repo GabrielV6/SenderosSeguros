@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.senderosseguros.conexion.AccesoDatos;
 import com.example.senderosseguros.entidad.Usuario;
 
 public class RegistrarFragment extends Fragment {

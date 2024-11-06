@@ -1,27 +1,19 @@
-package com.example.senderosseguros;
-
-import static com.example.senderosseguros.DataDB.pass;
-import static com.example.senderosseguros.DataDB.user;
+package com.example.senderosseguros.conexion;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class AccesoDatos {
 
     private Context context;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public AccesoDatos (Context ct){
         context = ct;
@@ -67,8 +59,8 @@ public class AccesoDatos {
         executorService.shutdown();
     }*/
 
-    public boolean obtenerTextoDesdeBD(int ID) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+    public boolean obtenerTextoDesdeBD() {
+        executor = Executors.newSingleThreadExecutor();
         final boolean[] existe = {false};
 
         executor.execute(() -> {
@@ -76,9 +68,9 @@ public class AccesoDatos {
             try {
                 Class.forName(DataDB.driver);
                 con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
-                String query = "SELECT COUNT(*) AS total FROM Barrios WHERE ID_Barrio = ?";
+                String query = "SELECT COUNT(*) AS total FROM Barrios";
                 PreparedStatement ps = con.prepareStatement(query);
-                ps.setInt(1, ID);
+                /*ps.setInt(1, ID);*/
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {

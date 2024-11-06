@@ -9,13 +9,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.senderosseguros.MainActivity;
 import com.example.senderosseguros.R;
+import com.example.senderosseguros.conexion.AccesoDatos;
 import com.example.senderosseguros.databinding.FragmentReporteBinding;
 import com.github.mikephil.charting.charts.HorizontalBarChart; // Cambiar a HorizontalBarChart
 import com.github.mikephil.charting.data.BarData;
@@ -23,7 +24,6 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import java.util.ArrayList;
 import java.util.List;
-import com.example.senderosseguros.AccesoDatos;
 
 public class ReporteFragment extends Fragment {
     private TextView textUltimosTresMeses;
@@ -50,7 +50,6 @@ public class ReporteFragment extends Fragment {
         buttonVolver.setOnClickListener(v -> mostrarElementos());
 
         // Codigo para mostrar txtBarrio de prueba
-
         textUltimosTresMeses = root.findViewById(R.id.textUltimosTresMeses);
         return root;
     }
@@ -78,8 +77,16 @@ public class ReporteFragment extends Fragment {
 
     private void mostrarGrafico() {
 
-        /*AccesoDatos accesoDatos = new AccesoDatos();
-        new Thread(() -> {
+        AccesoDatos accesoDatos = new AccesoDatos(requireContext());
+        boolean existe = accesoDatos.obtenerTextoDesdeBD();
+
+        if(existe){
+            Toast.makeText(this.getContext(), "CONECTA>", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this.getContext(), "NO CONECTA =(", Toast.LENGTH_SHORT).show();
+        }
+
+        /*new Thread(() -> {
             // Realiza la llamada a la base de datos en un hilo en segundo plano
             int id = 3;
             boolean existe = accesoDatos.obtenerTextoDesdeBD(id);
