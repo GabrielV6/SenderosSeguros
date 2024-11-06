@@ -3,6 +3,7 @@ package com.example.senderosseguros;
 import static com.example.senderosseguros.DataDB.pass;
 import static com.example.senderosseguros.DataDB.user;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -18,7 +19,13 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class AccesoDatos {
+
+    private Context context;
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    public AccesoDatos (Context ct){
+        context = ct;
+    }
 
     /*public String obtenerTextoDesdeBD(int ID) {
         Callable<String> tarea = () -> {
@@ -97,5 +104,9 @@ public class AccesoDatos {
 
         return existe[0];
     }
+
+    /*Metodo para REGISTRAR*/
+
+
 
 }

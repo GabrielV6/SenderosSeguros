@@ -38,7 +38,7 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/editTextText2"
+            android:id="@+id/et_Nombre"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:ems="10"
@@ -48,7 +48,7 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/et_apellido"
+            android:id="@+id/et_Apellido"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:ems="10"
@@ -69,7 +69,7 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/et_correo"
+            android:id="@+id/et_Correo"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:ems="10"
@@ -84,7 +84,7 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btnRegistrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

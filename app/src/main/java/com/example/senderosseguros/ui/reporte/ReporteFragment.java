@@ -78,7 +78,7 @@ public class ReporteFragment extends Fragment {
 
     private void mostrarGrafico() {
 
-        AccesoDatos accesoDatos = new AccesoDatos();
+        /*AccesoDatos accesoDatos = new AccesoDatos();
         new Thread(() -> {
             // Realiza la llamada a la base de datos en un hilo en segundo plano
             int id = 3;
@@ -91,8 +91,8 @@ public class ReporteFragment extends Fragment {
             // Actualiza la interfaz de usuario en el hilo principal
             /*getActivity().runOnUiThread(() -> {
                 textUltimosTresMeses.setText(texto);
-            });*/
-        }).start();
+            });
+        }).start();*/
 
         // Ocultar elementos antes de mostrar el gráfico
         ocultarElementos();
