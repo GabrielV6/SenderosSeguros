@@ -3,6 +3,7 @@ package com.example.senderosseguros;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +35,7 @@ public class RegistrarFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_registrar, container, false);
-        AccesoDatos accesoDatos = new AccesoDatos(requireContext());
+        //AccesoDatos accesoDatos = new AccesoDatos(requireContext());
 
         btnRegistrar = view.findViewById(R.id.btnRegistrar);
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
@@ -88,15 +89,29 @@ public class RegistrarFragment extends Fragment {
          }
 
          Usuario usuario = new Usuario ();
-         usuario.setUser(et_user);
-         usuario.setPass(et_pass);
          usuario.setNombre(et_nombre);
          usuario.setApellido(et_apellido);
          usuario.setDNI(et_dni);
          usuario.setCorreo(et_correo);
-         usuario.setEstado(true);
-         usuario.setPuntaje(0);
+         usuario.setUser(et_user);
+         usuario.setPass(et_pass);
 
+         AccesoDatos accesoDatos = new AccesoDatos(requireContext());
 
+         if(accesoDatos.agregarUser(usuario)){
+             Toast.makeText(getContext(), "Usuario agregado.", Toast.LENGTH_SHORT).show();
+             et_userRegis.setText("");
+             et_passRegis.setText("");
+             et_Nombre.setText("");
+             et_Apellido.setText("");
+             et_Correo.setText("");
+             et_DNI.setText("");
+
+             //Redirecciona a LoginFragment
+             NavHostFragment.findNavController(RegistrarFragment.this)
+                     .navigate(R.id.action_registrarFragment_to_loginFragment);
+         }else{
+             Toast.makeText(getContext(), "Error al agregar.", Toast.LENGTH_SHORT).show();
+         }
      }
 }

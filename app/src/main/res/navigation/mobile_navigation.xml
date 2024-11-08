@@ -29,6 +29,7 @@
         android:name="com.example.senderosseguros.ui.reporte.ReportarFragment"
         android:label="Reportar Obstaculo"
         tools:layout="@layout/fragment_reportar" />
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.senderosseguros.LoginFragment"
@@ -38,10 +39,15 @@
             android:id="@+id/action_loginFragment_to_registrarFragment"
             app:destination="@id/registrarFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/registrarFragment"
         android:name="com.example.senderosseguros.RegistrarFragment"
         android:label="fragment_registrar"
-        tools:layout="@layout/fragment_registrar" />
+        tools:layout="@layout/fragment_registrar" >
+        <action
+            android:id="@+id/action_registrarFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 
 </navigation>

@@ -2,14 +2,19 @@ package com.example.senderosseguros.conexion;
 
 import android.content.Context;
 
+import com.example.senderosseguros.entidad.Usuario;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class AccesoDatos {
@@ -20,8 +25,6 @@ public class AccesoDatos {
     public AccesoDatos (Context ct){
         context = ct;
     }
-
-
 
     public boolean obtenerTextoDesdeBD() {
         executor = Executors.newSingleThreadExecutor();
@@ -130,7 +133,50 @@ public class AccesoDatos {
         return obstaculos;
     }
 
+    //Metodo para agregar usuarios
 
+    public boolean agregarUser(Usuario usuario){
+        executor = Executors.newSingleThreadExecutor();
+        Future<Boolean> result = executor.submit(() -> {
+            try {
+                Class.forName(DataDB.driver);
+                String query = "INSERT INTO Usuarios (Nombre, Apellido, DNI, CorreoElectronico, Usuario, Contrasena, FechaRegistro, Puntaje, Estado) VALUES (?,?,?,?,?,?,?,?,?)";
+
+                try (Connection con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                     PreparedStatement st = con.prepareStatement(query)) {
+
+                    st.setString(1, usuario.getNombre());
+                    st.setString(2, usuario.getApellido());
+                    st.setString(3, usuario.getDNI());
+                    st.setString(4, usuario.getCorreo());
+                    st.setString(5, usuario.getUser());
+                    st.setString(6, usuario.getPass());
+                    st.setDate(7, new java.sql.Date(new java.util.Date().getTime()));
+                    st.setInt(8, 0);
+                    st.setBoolean(9, true);
+
+                    int rowsAffected = st.executeUpdate();
+                    return rowsAffected > 0;
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+        });
+
+        try {
+            return result.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            executor.shutdown();  // Cierra el executor para evitar fugas de recursos
+        }
+    }
 
 
 }

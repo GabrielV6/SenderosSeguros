@@ -1,5 +1,7 @@
 package com.example.senderosseguros.entidad;
 
+import java.util.Date;
+
 public class Usuario {
 
     private int ID_Usuario;
@@ -9,6 +11,7 @@ public class Usuario {
     private String User;
     private String Pass;
     private String Correo;
+    private Date FechaRegistro;
     private int Puntaje;
     private boolean Estado;
 
@@ -16,7 +19,7 @@ public class Usuario {
 
     }
 
-    public Usuario(int ID_Usuario, String nombre, String apellido, String DNI, String user, String pass, String correo, int puntaje, boolean estado) {
+    public Usuario(int ID_Usuario, String nombre, String apellido, String DNI, String user, String pass, String correo, Date fechaRegistro, int puntaje, boolean estado) {
         this.ID_Usuario = ID_Usuario;
         Nombre = nombre;
         Apellido = apellido;
@@ -24,6 +27,7 @@ public class Usuario {
         User = user;
         Pass = pass;
         Correo = correo;
+        FechaRegistro = fechaRegistro;
         Puntaje = puntaje;
         Estado = estado;
     }
@@ -62,6 +66,14 @@ public class Usuario {
 
     public boolean isEstado() {
         return Estado;
+    }
+
+    public Date getFechaRegistro() {
+        return FechaRegistro;
+    }
+
+    public void setFechaRegistro(Date fechaRegistro) {
+        FechaRegistro = fechaRegistro;
     }
 
     /*public void setID_Usuario(int ID_Usuario) {
@@ -110,6 +122,7 @@ public class Usuario {
                 ", User='" + User + '\'' +
                 ", Pass='" + Pass + '\'' +
                 ", Correo='" + Correo + '\'' +
+                ", FechaRegistro=" + FechaRegistro +
                 ", Puntaje=" + Puntaje +
                 ", Estado=" + Estado +
                 '}';
