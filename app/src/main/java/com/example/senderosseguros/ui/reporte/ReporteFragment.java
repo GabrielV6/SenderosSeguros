@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+
 
 import com.example.senderosseguros.R;
 import com.example.senderosseguros.conexion.AccesoDatos;
@@ -24,32 +24,32 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import java.util.ArrayList;
 import java.util.List;
+import android.os.Handler;
+import android.os.Looper;
 
 public class ReporteFragment extends Fragment {
     private TextView textUltimosTresMeses;
     private FragmentReporteBinding binding;
-    private HorizontalBarChart barChart; // Cambiar a HorizontalBarChart
+    private HorizontalBarChart barChart;
+    private AccesoDatos accesoDatos;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ReporteViewModel reporteViewModel =
-                new ViewModelProvider(this).get(ReporteViewModel.class);
+
 
         binding = FragmentReporteBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Inicializar los Spinners
+        accesoDatos = new AccesoDatos(getContext());
         setupSpinners();
 
-        // Inicializar el HorizontalBarChart y el botón de generación
-        barChart = root.findViewById(R.id.barChart); // Asegúrate de que este ID coincida
+        barChart = root.findViewById(R.id.barChart);
         Button buttonGenerar = root.findViewById(R.id.buttonGenerar);
         ImageButton buttonVolver = root.findViewById(R.id.buttonVolver);
 
         buttonGenerar.setOnClickListener(v -> mostrarGrafico());
         buttonVolver.setOnClickListener(v -> mostrarElementos());
 
-        // Codigo para mostrar txtBarrio de prueba
         textUltimosTresMeses = root.findViewById(R.id.textUltimosTresMeses);
         return root;
     }
@@ -57,16 +57,34 @@ public class ReporteFragment extends Fragment {
 
     private void setupSpinners() {
         // Spinner para "Barrio"
-        ArrayAdapter<CharSequence> barrioAdapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.barrio_options, android.R.layout.simple_spinner_item);
-        barrioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.spinnerBarrio.setAdapter(barrioAdapter);
+        String seleccionarBarrio = getString(R.string.sp_barrio);
+        String seleccionarTipo = getString(R.string.sp_tipo);
+
+        // Spinner para "Barrio"
+        new Thread(() -> {
+            List<String> barrios = accesoDatos.obtenerBarrios();
+            barrios.add(0, seleccionarBarrio);
+
+            new Handler(Looper.getMainLooper()).post(() -> {
+                ArrayAdapter<String> barrioAdapter = new ArrayAdapter<>(getContext(),
+                        android.R.layout.simple_spinner_item, barrios);
+                barrioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                binding.spinnerBarrio.setAdapter(barrioAdapter);
+            });
+        }).start();
 
         // Spinner para "Tipo de Obstáculo"
-        ArrayAdapter<CharSequence> tipoAdapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.tipo_options, android.R.layout.simple_spinner_item);
-        tipoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.spinnerObstaculo.setAdapter(tipoAdapter);
+        new Thread(() -> {
+            List<String> obstaculos = accesoDatos.obtenerObstaculosActivos();
+            obstaculos.add(0, seleccionarTipo);
+
+            new Handler(Looper.getMainLooper()).post(() -> {
+                ArrayAdapter<String> tipoAdapter = new ArrayAdapter<>(getContext(),
+                        android.R.layout.simple_spinner_item, obstaculos);
+                tipoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                binding.spinnerObstaculo.setAdapter(tipoAdapter);
+            });
+        }).start();
 
         // Spinner para "Periodo"
         ArrayAdapter<CharSequence> periodoAdapter = ArrayAdapter.createFromResource(getContext(),
@@ -81,7 +99,7 @@ public class ReporteFragment extends Fragment {
         boolean existe = accesoDatos.obtenerTextoDesdeBD();
 
         if(existe){
-            Toast.makeText(this.getContext(), "CONECTA>", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getContext(), "CONECTA ok>", Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(this.getContext(), "NO CONECTA =(", Toast.LENGTH_SHORT).show();
         }
@@ -152,9 +170,9 @@ public class ReporteFragment extends Fragment {
         binding.buttonGenerar.setVisibility(View.GONE);
 
         // Ocultar los RadioButtons
-        binding.radioButton.setVisibility(View.GONE);
-        binding.radioButton2.setVisibility(View.GONE);
-        binding.radioButton3.setVisibility(View.GONE);
+        binding.rbBarrio.setVisibility(View.GONE);
+        binding.rbObstaculo.setVisibility(View.GONE);
+        binding.rbTiempo.setVisibility(View.GONE);
 
         // Mostrar el botón volver
         binding.buttonVolver.setVisibility(View.VISIBLE);
@@ -170,9 +188,9 @@ public class ReporteFragment extends Fragment {
         binding.spinnerObstaculo.setVisibility(View.VISIBLE);
         binding.spinnerTiempo.setVisibility(View.VISIBLE);
         binding.buttonGenerar.setVisibility(View.VISIBLE);
-        binding.radioButton.setVisibility(View.VISIBLE);
-        binding.radioButton2.setVisibility(View.VISIBLE);
-        binding.radioButton3.setVisibility(View.VISIBLE);
+        binding.rbBarrio.setVisibility(View.VISIBLE);
+        binding.rbObstaculo.setVisibility(View.VISIBLE);
+        binding.rbTiempo.setVisibility(View.VISIBLE);
 
         // Ocultar el GRAFICO Y TEXTO
         barChart.setVisibility(View.GONE);
@@ -185,5 +203,19 @@ public class ReporteFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+    // Metodo para habilitar y deshabilitar Spinners y RadioButtons
+    private void updateSpinnersAndRadios() {
+        boolean barrioSelected = binding.rbBarrio.isChecked();
+        boolean obstaculoSelected = binding.rbObstaculo.isChecked();
+        boolean tiempoSelected = binding.rbTiempo.isChecked();
+
+        binding.spinnerBarrio.setEnabled(barrioSelected);
+        binding.spinnerObstaculo.setEnabled(obstaculoSelected);
+        binding.spinnerTiempo.setEnabled(tiempoSelected);
+
+        binding.rbBarrio.setEnabled(!obstaculoSelected && !tiempoSelected);
+        binding.rbObstaculo.setEnabled(!barrioSelected && !tiempoSelected);
+        binding.rbTiempo.setEnabled(!barrioSelected && !obstaculoSelected);
     }
 }

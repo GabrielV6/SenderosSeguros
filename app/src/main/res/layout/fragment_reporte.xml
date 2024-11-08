@@ -59,7 +59,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioButton" />
+        app:layout_constraintTop_toBottomOf="@+id/rbBarrio" />
 
     <Spinner
         android:id="@+id/spinnerObstaculo"
@@ -73,7 +73,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioButton2" />
+        app:layout_constraintTop_toBottomOf="@+id/rbObstaculo" />
 
     <Spinner
         android:id="@+id/spinnerTiempo"
@@ -87,7 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioButton3" />
+        app:layout_constraintTop_toBottomOf="@+id/rbTiempo" />
 
     <Button
         android:id="@+id/buttonGenerar"
@@ -107,7 +107,7 @@
         app:layout_constraintTop_toBottomOf="@+id/spinnerTiempo" />
 
     <RadioButton
-        android:id="@+id/radioButton"
+        android:id="@+id/rbBarrio"
         android:layout_width="374dp"
         android:layout_height="57dp"
         android:layout_marginTop="76dp"
@@ -119,7 +119,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_reporte" />
 
     <RadioButton
-        android:id="@+id/radioButton2"
+        android:id="@+id/rbObstaculo"
         android:layout_width="374dp"
         android:layout_height="57dp"
         android:layout_marginTop="12dp"
@@ -131,7 +131,7 @@
         app:layout_constraintTop_toBottomOf="@+id/spinnerBarrio" />
 
     <RadioButton
-        android:id="@+id/radioButton3"
+        android:id="@+id/rbTiempo"
         android:layout_width="374dp"
         android:layout_height="57dp"
         android:layout_marginTop="36dp"
