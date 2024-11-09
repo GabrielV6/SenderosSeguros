@@ -1,5 +1,7 @@
 package com.example.senderosseguros.ui.reporte;
 
+import static com.example.senderosseguros.R.id.radioGroup;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +44,7 @@ public class ReporteFragment extends Fragment {
         View root = binding.getRoot();
 
         accesoDatos = new AccesoDatos(getContext());
-        setupSpinners();
+       // setupSpinners();
 
         barChart = root.findViewById(R.id.barChart);
         Button buttonGenerar = root.findViewById(R.id.buttonGenerar);
@@ -51,7 +54,57 @@ public class ReporteFragment extends Fragment {
         buttonVolver.setOnClickListener(v -> mostrarElementos());
 
         textUltimosTresMeses = root.findViewById(R.id.textUltimosTresMeses);
+
+        // Obtener el RadioGroup
+        RadioGroup radioGroup = root.findViewById(R.id.radioGroup);
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // Acción según el RadioButton seleccionado con if
+                if (checkedId == R.id.rbBarrio) {
+                    // Mostrar spinner correspondiente
+                    habilitarSpinnerBarrio();
+                } else if (checkedId == R.id.rbObstaculo) {
+                    // Mostrar spinner correspondiente
+                    habilitarSpinnerObstaculo();
+                } else if (checkedId == R.id.rbTiempo) {
+                    // Mostrar spinner correspondiente
+                    habilitarSpinnerTiempo();
+                }
+            }
+        });
         return root;
+    }
+
+    private void habilitarSpinnerBarrio() {
+        // Inhabilitar los spinners que no se están utilizando
+        binding.spinnerObstaculo.setEnabled(false);
+        binding.spinnerTiempo.setEnabled(false);
+
+        // Hacer el spinner de Barrio visible y habilitarlo
+        binding.spinnerBarrio.setVisibility(View.VISIBLE);
+        binding.spinnerBarrio.setEnabled(true);
+    }
+
+    private void habilitarSpinnerObstaculo() {
+        // Inhabilitar los spinners que no se están utilizando
+        binding.spinnerBarrio.setEnabled(false);
+        binding.spinnerTiempo.setEnabled(false);
+
+        // Hacer el spinner de Obstáculo visible y habilitarlo
+        binding.spinnerObstaculo.setVisibility(View.VISIBLE);
+        binding.spinnerObstaculo.setEnabled(true);
+    }
+
+    private void habilitarSpinnerTiempo() {
+        // Inhabilitar los spinners que no se están utilizando
+        binding.spinnerBarrio.setEnabled(false);
+        binding.spinnerObstaculo.setEnabled(false);
+
+        // Hacer el spinner de Tiempo visible y habilitarlo
+        binding.spinnerTiempo.setVisibility(View.VISIBLE);
+        binding.spinnerTiempo.setEnabled(true);
     }
 
 
