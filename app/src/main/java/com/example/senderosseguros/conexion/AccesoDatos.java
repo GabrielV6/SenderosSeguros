@@ -134,7 +134,6 @@ public class AccesoDatos {
     }
 
     //Metodo para agregar usuarios
-
     public boolean agregarUser(Usuario usuario){
         executor = Executors.newSingleThreadExecutor();
         Future<Boolean> result = executor.submit(() -> {
@@ -178,5 +177,9 @@ public class AccesoDatos {
         }
     }
 
+    //Metodo para chequear que usuario existe
+    public boolean existeUser (String user) {
+        return false;
+    }
 
 }

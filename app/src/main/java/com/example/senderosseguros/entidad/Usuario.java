@@ -19,6 +19,11 @@ public class Usuario {
 
     }
 
+    public Usuario (String DNI, String user) {
+        this.DNI = DNI;
+        User = user;
+    }
+
     public Usuario(int ID_Usuario, String nombre, String apellido, String DNI, String user, String pass, String correo, Date fechaRegistro, int puntaje, boolean estado) {
         this.ID_Usuario = ID_Usuario;
         Nombre = nombre;
