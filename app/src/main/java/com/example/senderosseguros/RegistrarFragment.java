@@ -111,6 +111,7 @@ public class RegistrarFragment extends Fragment {
              NavHostFragment.findNavController(RegistrarFragment.this)
                      .navigate(R.id.action_registrarFragment_to_loginFragment);
          }else{
+             //Falta validacion existeUser y existeDNI
              Toast.makeText(getContext(), "Error al agregar.", Toast.LENGTH_SHORT).show();
          }
      }

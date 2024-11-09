@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.senderosseguros.conexion.AccesoDatos;
@@ -20,6 +21,7 @@ public class LoginFragment extends Fragment {
 
     private Button btnLogin;
     private EditText et_user, et_pass;
+    private TextView tv_regis;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -43,6 +45,16 @@ public class LoginFragment extends Fragment {
                 existeEnBD();
             }
         });
+
+        tv_regis = view.findViewById(R.id.tv_regis);
+        tv_regis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Redirecciona a RegistrarFragment
+                NavHostFragment.findNavController(LoginFragment.this)
+                        .navigate(R.id.action_loginFragment_to_registrarFragment);
+            }
+        });
         return view;
 
         /*// Inflate the layout for this fragment
@@ -63,22 +75,25 @@ public class LoginFragment extends Fragment {
             return;
         }
 
+        //Falta validación de condiciones para la pass
+
         AccesoDatos accesoDatos = new AccesoDatos(requireContext());
 
-        boolean existe = accesoDatos.existeUser(user);
+        boolean existe = accesoDatos.existeUser(user, pass);
 
         if (existe) {
             Toast.makeText(this.getContext(), "Login Correcto", Toast.LENGTH_SHORT).show();
+            //Falta agregar datos a sesion.
+            et_user.setText("");
+            et_pass.setText("");
 
             //Redirecciona a LoginFragment
             NavHostFragment.findNavController(LoginFragment.this)
                     .navigate(R.id.action_loginFragment_to_nav_home);
 
-            et_user.setText("");
-            et_pass.setText("");
-
         } else {
-            Toast.makeText(this.getContext(), "Login Incorrecto", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getContext(), "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+            //Falta contador de login malos para bloquear usuario temporalmente.
         }
     }
 }
