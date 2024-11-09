@@ -79,7 +79,7 @@ public class LoginFragment extends Fragment {
 
         AccesoDatos accesoDatos = new AccesoDatos(requireContext());
 
-        boolean existe = accesoDatos.existeUser(user, pass);
+        boolean existe = accesoDatos.existeUserPass(user, pass);
 
         if (existe) {
             Toast.makeText(this.getContext(), "Login Correcto", Toast.LENGTH_SHORT).show();

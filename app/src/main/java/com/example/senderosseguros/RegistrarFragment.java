@@ -98,8 +98,16 @@ public class RegistrarFragment extends Fragment {
 
          AccesoDatos accesoDatos = new AccesoDatos(requireContext());
 
-         if(accesoDatos.agregarUser(usuario)){
+         boolean existeDNI = accesoDatos.existeDNI(et_dni);
+         boolean existeUser = accesoDatos.existeUser(et_user);
+
+         if (existeDNI) {
+             Toast.makeText(getContext(), "El DNI ya está registrado.", Toast.LENGTH_SHORT).show();
+         } else if (existeUser) {
+             Toast.makeText(getContext(), "El nombre de usuario ya está registrado.", Toast.LENGTH_SHORT).show();
+         } else if (accesoDatos.agregarUser(usuario)) {
              Toast.makeText(getContext(), "Usuario agregado.", Toast.LENGTH_SHORT).show();
+
              et_userRegis.setText("");
              et_passRegis.setText("");
              et_Nombre.setText("");
@@ -107,12 +115,12 @@ public class RegistrarFragment extends Fragment {
              et_Correo.setText("");
              et_DNI.setText("");
 
-             //Redirecciona a LoginFragment
+             // Redirecciona a LoginFragment
              NavHostFragment.findNavController(RegistrarFragment.this)
                      .navigate(R.id.action_registrarFragment_to_loginFragment);
-         }else{
-             //Falta validacion existeUser y existeDNI
-             Toast.makeText(getContext(), "Error al agregar.", Toast.LENGTH_SHORT).show();
+         } else {
+             Toast.makeText(getContext(), "Error al agregar usuario.", Toast.LENGTH_SHORT).show();
          }
+
      }
 }
