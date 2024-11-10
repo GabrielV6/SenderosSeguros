@@ -56,7 +56,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
     private static final String TAG = "Mis mapas";
     private RequestQueue requestQueue;
     private LatLng punto1, punto2; // Variables para guardar las coordenadas de dos puntos
-    private boolean isFirstPoint = true; // Variable para alternar entre el primer y segundo punto
+    private boolean isFirstPoint = false; // Variable para alternar entre el primer y segundo punto
     private LatLng puntoSeleccionado; // Variable para guardar las coordenadas
 
     // Register the permissions launcher
@@ -151,9 +151,15 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         uiSettings.setTiltGesturesEnabled(true);
         uiSettings.setRotateGesturesEnabled(true);
 
-
         // Habilita el listener para capturar clics en el mapa
         mMap.setOnMapClickListener(latLng -> {
+            if (punto1!=null && punto2!=null) {
+                mMap.clear();
+                getCurrentLocation();
+                punto2 = null;
+                isFirstPoint = false;
+            }
+            // Guarda las coordenadas del clic
             if (isFirstPoint) {
                 punto1 = latLng;
                 Toast.makeText(getContext(), "Punto 1 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_SHORT).show();
@@ -166,7 +172,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             isFirstPoint = !isFirstPoint;
 
             // Limpia el mapa y agrega ambos puntos como marcadores (si existen)
-            mMap.clear();
+            //mMap.clear();
             if (punto1 != null) {
                 mMap.addMarker(new MarkerOptions().position(punto1).title("Punto 1"));
             }
@@ -236,7 +242,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                         // Crea la polilínea y agrégala al mapa
                         Polyline polyline = mMap.addPolyline(new PolylineOptions()
                                 .addAll(points)
-                                .width(5)
+                                .width(8)
                                 .color(Color.BLUE));
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -275,6 +281,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                     .addOnSuccessListener(requireActivity(), location -> {
                         if (location != null) {
                             LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                            punto1 = currentLocation;
                             mMap.addMarker(new MarkerOptions().position(currentLocation).title("Mi ubicacion"));
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f));
                         }
