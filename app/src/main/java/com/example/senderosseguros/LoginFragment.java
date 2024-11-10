@@ -1,5 +1,6 @@
 package com.example.senderosseguros;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -75,21 +76,27 @@ public class LoginFragment extends Fragment {
             return;
         }
 
-        //Falta validación de condiciones para la pass
-
         AccesoDatos accesoDatos = new AccesoDatos(requireContext());
 
         boolean existe = accesoDatos.existeUserPass(user, pass);
+        String correo = accesoDatos.recuperarCorreo(user);
 
         if (existe) {
             Toast.makeText(this.getContext(), "Login Correcto", Toast.LENGTH_SHORT).show();
-            //Falta agregar datos a sesion.
+            
             et_user.setText("");
             et_pass.setText("");
 
-            //Redirecciona a LoginFragment
-            NavHostFragment.findNavController(LoginFragment.this)
-                    .navigate(R.id.action_loginFragment_to_nav_home);
+            // Crear el Intent para pasar los datos a MainActivity
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.putExtra("user", user);
+            intent.putExtra("correo", correo);
+
+            // Iniciar MainActivity
+            startActivity(intent);
+
+            // Finaliza LoginFragment para que no se quede en el stack
+            getActivity().finish();
 
         } else {
             Toast.makeText(this.getContext(), "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();

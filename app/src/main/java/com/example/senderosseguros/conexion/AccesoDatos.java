@@ -303,4 +303,39 @@ public class AccesoDatos {
         return existe[0];
     }
 
+    //Metodo para traer correo de BD y mostrar en Home
+    public String recuperarCorreo (String user){
+
+        String correo = null;
+
+        executor = Executors.newSingleThreadExecutor();
+        Future<String> result = executor.submit(() -> {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                try (Connection con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                     PreparedStatement ps = con.prepareStatement("SELECT CorreoElectronico FROM Usuarios WHERE Usuario = ?")) {
+
+                    ps.setString(1, user);
+                    ResultSet rs = ps.executeQuery();
+
+                    if (rs.next()) {
+                        return rs.getString("CorreoElectronico");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
+
+        try {
+            correo = result.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            executor.shutdown();
+        }
+
+        return correo;
+    }
 }

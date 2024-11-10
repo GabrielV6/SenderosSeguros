@@ -71,6 +71,12 @@ public class RegistrarFragment extends Fragment {
              return;
          }
 
+         if (!validarContrasena(et_pass)) {
+             Toast.makeText(getContext(), "La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula y un número.", Toast.LENGTH_SHORT).show();
+             return;
+         }
+
+
          // Verificación de longitud máxima de 9 dígitos para dni
          if (et_dni.length() > 9) {
              Toast.makeText(getContext(), "El DNI no puede tener más de 9 dígitos.", Toast.LENGTH_SHORT).show();
@@ -123,4 +129,16 @@ public class RegistrarFragment extends Fragment {
          }
 
      }
+
+    public boolean validarContrasena(String et_pass) {
+        // Verifica longitud mínima de 8 caracteres
+        if (et_pass.length() < 8) {
+            return false;
+        }
+
+        // Expresión regular para verificar que contenga al menos una mayúscula, una minúscula y un número
+        String patron = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$";
+        return et_pass.matches(patron);
+    }
+
 }

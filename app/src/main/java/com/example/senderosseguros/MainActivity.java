@@ -1,14 +1,17 @@
 package com.example.senderosseguros;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -41,6 +44,27 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        // Inicializa el NavigationView (asegúrate de que el ID sea correcto)
+        navigationView = findViewById(R.id.nav_view);
+
+        // Obtener los datos del Intent
+        Intent intent = getIntent();
+        String user = intent.getStringExtra("user");
+        String correo = intent.getStringExtra("correo");
+
+        // Actualizar los TextViews en el header del Navigation Drawer
+        if (user != null && correo != null) {
+            // Obtén la cabecera del NavigationView
+            View headerView = navigationView.getHeaderView(0); // Obtener la vista del header
+            TextView tvUser = headerView.findViewById(R.id.tv_user);
+            TextView tvCorreo = headerView.findViewById(R.id.tv_correo);
+
+            tvUser.setText(user);
+            tvCorreo.setText(correo);
+
+            navController.navigate(R.id.nav_home);
+        }
     }
 
     @Override
