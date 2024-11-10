@@ -34,7 +34,7 @@
         android:id="@+id/loginFragment"
         android:name="com.example.senderosseguros.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_registrarFragment"
             app:destination="@id/registrarFragment" />
@@ -51,6 +51,16 @@
         <action
             android:id="@+id/action_registrarFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_logout"
+        android:name="com.example.senderosseguros.LogoutFragment"
+        android:label="Cerrar Sesion"
+        tools:layout="@layout/fragment_logout" >
+    <action
+        android:id="@+id/action_home_to_logout"
+        app:destination="@id/nav_logout" />
     </fragment>
 
 </navigation>

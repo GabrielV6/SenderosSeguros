@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -39,12 +41,27 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_reporte, R.id.nav_slideshow, R.id.nav_reportar)
+                R.id.nav_home, R.id.nav_reporte, R.id.nav_slideshow, R.id.nav_reportar,R.id.nav_logout)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (destination.getId() == R.id.loginFragment) {
+                // Quitar el botón de regreso en el fragmento de login
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            } else {
+                // Mostrar el botón de regreso en otros fragmentos
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        });
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false); // Para quitar el título automático
+
 
         // Inicializa el NavigationView (asegúrate de que el ID sea correcto)
         navigationView = findViewById(R.id.nav_view);
@@ -68,31 +85,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (item.getItemId() == R.id.action_logout) {
-            logout(); // Llamar a la función logout cuando se hace clic en el ítem de logout
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void logout() {
-        String user = null;
-        String correo = null;
-
-        // Navegas al LoginFragment usando el NavController
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        navController.navigate(R.id.loginFragment);
-    }
-
+    }*/
 
     @Override
     public boolean onSupportNavigateUp() {

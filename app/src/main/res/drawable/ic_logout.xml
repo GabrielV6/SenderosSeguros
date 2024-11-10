@@ -1,0 +1,17 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Flecha de salida -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M10,16.5l-1.4,-1.4L13.7,10 8.6,4.9 10,3.5 16.5,10z" />
+
+    <!-- Rectángulo representando la puerta -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M19,3h-9c-1.1,0 -2,0.9 -2,2v3h2V5h9v14h-9v-3H8v3c0,1.1 0.9,2 2,2h9c1.1,0 2,-0.9 2,-2V5c0,-1.1 -0.9,-2 -2,-2z" />
+
+</vector>

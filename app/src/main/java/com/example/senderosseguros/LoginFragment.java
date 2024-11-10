@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.senderosseguros.conexion.AccesoDatos;
 import com.example.senderosseguros.databinding.FragmentLoginBinding;
+import com.google.android.material.navigation.NavigationView;
 
 
 public class LoginFragment extends Fragment {
@@ -57,9 +58,6 @@ public class LoginFragment extends Fragment {
             }
         });
         return view;
-
-        /*// Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_registrar, container, false);*/
     }
 
     public void existeEnBD() {
