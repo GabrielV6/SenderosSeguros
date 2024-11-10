@@ -83,7 +83,7 @@ public class LoginFragment extends Fragment {
 
         if (existe) {
             Toast.makeText(this.getContext(), "Login Correcto", Toast.LENGTH_SHORT).show();
-            
+
             et_user.setText("");
             et_pass.setText("");
 

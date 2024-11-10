@@ -2,6 +2,7 @@ package com.example.senderosseguros;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
@@ -73,6 +74,25 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.action_logout) {
+            logout(); // Llamar a la función logout cuando se hace clic en el ítem de logout
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        String user = null;
+        String correo = null;
+
+        // Navegas al LoginFragment usando el NavController
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        navController.navigate(R.id.loginFragment);
+    }
+
 
     @Override
     public boolean onSupportNavigateUp() {
