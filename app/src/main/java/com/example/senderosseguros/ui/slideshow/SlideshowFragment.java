@@ -1,5 +1,7 @@
 package com.example.senderosseguros.ui.slideshow;
+
 import com.example.senderosseguros.R;
+
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -131,6 +133,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
         navController.navigate(R.id.nav_reportar, bundle);
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -181,7 +184,16 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                     Manifest.permission.ACCESS_COARSE_LOCATION
             });
         }
-        rutaEnMapa(mMap);
+
+        binding.search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (punto1 != null && punto2 != null) {
+                    rutaEnMapa(mMap);
+                }
+            }
+        });
+        //rutaEnMapa(mMap);
     }
 
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
@@ -243,8 +255,8 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         polylineOptions.add(new LatLng(40.7128, -74.0060));
         polylineOptions.add(new LatLng(34.0522, -118.2437));
         mMap.addPolyline(polylineOptions);*/
-        LatLng origin = new LatLng(-34.45549129906697, -58.62413420527057);//-34.45549129906697, -58.62413420527057
-        LatLng dest = new LatLng(-34.455711234669025, -58.63267893194494);//-34.455711234669025, -58.63267893194494
+        LatLng origin = new LatLng(punto1.latitude, punto1.longitude);
+        LatLng dest = new LatLng(punto2.latitude, punto2.longitude);
         drawRoute(origin, dest);
     }
 
