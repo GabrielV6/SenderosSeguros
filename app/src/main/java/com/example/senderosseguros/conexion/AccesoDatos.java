@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AccesoDatos {
 
@@ -448,4 +449,77 @@ public class AccesoDatos {
         return obstacles;
     }
 
+    public int insertarPunto(double latitud, double longitud, int idBarrio) {
+        final int[] idPunto = {-1}; // Usamos un array para obtener el valor dentro del Executor
+
+        executor.execute(() -> {
+            Connection con = null;
+            try {
+                Class.forName(DataDB.driver);
+                String query = "INSERT INTO Puntos (Latitud, Longitud, ID_Barrio) VALUES (?, ?, ?)";
+
+                try (Connection conn = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                     PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+                    ps.setDouble(1, latitud);
+                    ps.setDouble(2, longitud);
+                    ps.setInt(3, idBarrio);
+
+                    int rowsAffected = ps.executeUpdate();
+
+                    if (rowsAffected > 0) {
+                        ResultSet rs = ps.getGeneratedKeys();
+                        if (rs.next()) {
+                            idPunto[0] = rs.getInt(1); // Obtenemos el ID_Punto generado
+                        }
+                        rs.close();
+                    }
+                }
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        try {
+            executor.shutdown();
+            executor.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return idPunto[0];
+    }
+//ESTE METODO AUN NO ANDA.... VER PORQUE....
+
+    public boolean insertarObstaculo(int idTipoObstaculo, String comentarios, String imagen, int idUsuario, int idPunto, String fechaBaja, int contadorSolucion, int estado) {
+        AtomicBoolean exito = new AtomicBoolean(false);
+
+        executor.execute(() -> {
+            try {
+                Class.forName(DataDB.driver);
+                String query = "INSERT INTO Obstaculos (ID_TipoObstaculo, Comentarios, Imagen, FechaCreacion, ID_Usuario, ID_Punto, FechaBaja, ContadorSolucion, Estado) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?)";
+
+                try (Connection conn = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                     PreparedStatement ps = conn.prepareStatement(query)) {
+
+                    ps.setInt(1, idTipoObstaculo);
+                    ps.setString(2, comentarios);
+                    ps.setString(3, imagen);
+                    ps.setInt(4, idUsuario);
+                    ps.setInt(5, idPunto);
+                    ps.setString(6, fechaBaja);
+                    ps.setInt(7, contadorSolucion);
+                    ps.setInt(8, estado);
+
+                    int rowsAffected = ps.executeUpdate();
+
+                    exito.set(rowsAffected > 0);
+                }
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return exito.get();
+    }
 }

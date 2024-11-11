@@ -126,10 +126,13 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         Toast.makeText(getContext(), "Opción seleccionada: " + option, Toast.LENGTH_SHORT).show();
         binding.frameLayout.setVisibility(View.GONE);
         // TO DO: ACA VA LA LOGICA PARA PROCESAR EL OBSTACULO REPORTADO...
+        getCurrentLocation();
 
         Bundle bundle = new Bundle();
         bundle.putString("selected_option", option); // Pasar la opción seleccionada
-
+        bundle.putDouble("latitud", punto1.latitude);  // Latitud del punto1
+        bundle.putDouble("longitud", punto1.longitude); // Longitud del punto1
+        
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
         navController.navigate(R.id.nav_reportar, bundle);
     }
