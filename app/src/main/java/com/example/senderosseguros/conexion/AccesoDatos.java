@@ -3,6 +3,7 @@ package com.example.senderosseguros.conexion;
 import android.content.Context;
 
 import com.example.senderosseguros.entidad.ObstaculoReporte;
+import com.example.senderosseguros.entidad.ObstaculoMarcadores;
 import com.example.senderosseguros.entidad.Usuario;
 
 import java.sql.Connection;
@@ -397,4 +398,54 @@ public class AccesoDatos {
 
         return correo;
     }
+
+    public List<ObstaculoMarcadores> getObstaculos() {
+        executor = Executors.newSingleThreadExecutor();
+        List<ObstaculoMarcadores> obstacles = new ArrayList<>();
+
+        executor.execute(() -> {
+            Connection con = null;
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+
+                String query = "SELECT Obstaculos.ID_Obstaculo, CatalogoObstaculos.Descripcion AS Descripcion_Obstaculo, " +
+                        "Obstaculos.ID_TipoObstaculo, Puntos.Latitud, Puntos.Longitud " +
+                        "FROM Obstaculos " +
+                        "JOIN Puntos ON Obstaculos.ID_Punto = Puntos.ID_Punto " +
+                        "JOIN CatalogoObstaculos ON Obstaculos.ID_TipoObstaculo = CatalogoObstaculos.ID_TipoObstaculo " +
+                        "WHERE Obstaculos.Estado = 1";
+
+                PreparedStatement ps = con.prepareStatement(query);
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    int idObstaculo = rs.getInt("ID_Obstaculo");
+                    int idTipoObstaculo = rs.getInt("ID_TipoObstaculo");
+                    String descripcionObstaculo = rs.getString("Descripcion_Obstaculo");
+                    double latitud = rs.getDouble("Latitud");
+                    double longitud = rs.getDouble("Longitud");
+
+                    ObstaculoMarcadores obstaculo = new ObstaculoMarcadores(idObstaculo, idTipoObstaculo,descripcionObstaculo, latitud, longitud);
+                    obstacles.add(obstaculo);
+                }
+
+                rs.close();
+                ps.close();
+                con.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        try {
+            executor.shutdown();
+            executor.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return obstacles;
+    }
+
 }
