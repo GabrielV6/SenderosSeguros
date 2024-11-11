@@ -22,10 +22,11 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.android.volley.BuildConfig;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.senderosseguros.conexion.AccesoDatos;
 import com.example.senderosseguros.databinding.FragmentSlideshowBinding;
+import com.example.senderosseguros.entidad.ObstaculoMarcadores;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,11 +34,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.PolyUtil;
 
 import org.json.JSONArray;
@@ -45,7 +46,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Properties;
 
 public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
@@ -150,6 +150,35 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         uiSettings.setCompassEnabled(true);
         uiSettings.setTiltGesturesEnabled(true);
         uiSettings.setRotateGesturesEnabled(true);
+
+        AccesoDatos accesoDatos = new AccesoDatos(requireContext());
+        List<ObstaculoMarcadores> obstacles = accesoDatos.getObstaculos();
+
+        for (ObstaculoMarcadores obstaculo : obstacles) {
+            LatLng position = new LatLng(obstaculo.getLatitud(), obstaculo.getLongitud());
+            String title = "Tipo: " + obstaculo.getDescripcionObstaculo();
+
+            float markerColor;
+            switch (obstaculo.getIdTipoObstaculo()) {
+                case 1:
+                    markerColor = BitmapDescriptorFactory.HUE_YELLOW;
+                    break;
+                case 2:
+                    markerColor = BitmapDescriptorFactory.HUE_GREEN;
+                    break;
+                case 3:
+                    markerColor = BitmapDescriptorFactory.HUE_BLUE;
+                    break;
+                default:
+                    markerColor = BitmapDescriptorFactory.HUE_ORANGE;
+                    break;
+            }
+
+            mMap.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title(title)
+                    .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
+        }
 
         // Habilita el listener para capturar clics en el mapa
         mMap.setOnMapClickListener(latLng -> {
