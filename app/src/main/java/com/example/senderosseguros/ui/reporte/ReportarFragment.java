@@ -36,20 +36,18 @@ public class ReportarFragment extends Fragment {
         binding = FragmentReportarBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Recuperar la opción seleccionada
+        // Recuperar la opción seleccionada de los iconos de obstaculos
         if (getArguments() != null) {
             selectedOption = getArguments().getString("selected_option");
-            // Recuperar las coordenadas como doubles
             double latitudPunto1 = getArguments().getDouble("latitud");
             double longitudPunto1 = getArguments().getDouble("longitud");
 
             punto1 = new LatLng(latitudPunto1, longitudPunto1);
 
-            // muestro las coordenadas en un Toast para verificar
+            // coordenadas para verificar que seleccione el punto 1
             Toast.makeText(getContext(), "Punto 1: " + punto1.latitude + ", " + punto1.longitude, Toast.LENGTH_SHORT).show();
         }
 
-        // Configuramos el TextView para mostrar la opción seleccionada
         if (selectedOption != null) {
             binding.typeSpinner.setText(selectedOption);
         }
@@ -67,7 +65,6 @@ public class ReportarFragment extends Fragment {
                 // Llamamos al método insertarPunto
                 int idPunto = accesoDatos.insertarPunto(punto1.latitude, punto1.longitude, idBarrio);
 
- //INICIO ESTO AUN NO ANDA .....
                 String imagen = null;
                 String fechaCreacionStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
                 String fechaBaja = null;
@@ -85,7 +82,7 @@ public class ReportarFragment extends Fragment {
                             contadorSolucion,
                             estado
                     );
-// FIN ....ESTO AUN NO ANDA ...
+
                     if (exito) {
                         Toast.makeText(getContext(), "Obstáculo reportado correctamente.", Toast.LENGTH_SHORT).show();
                         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
@@ -94,7 +91,7 @@ public class ReportarFragment extends Fragment {
                         Toast.makeText(getContext(), "Hubo un error al reportar el obstáculo.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getContext(), "Hubo un error al insertar el punto.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Hubo un error al insertar el punto de coordenada.", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Toast.makeText(getContext(), "Por favor, asegúrate de seleccionar el punto y el obstáculo.", Toast.LENGTH_SHORT).show();

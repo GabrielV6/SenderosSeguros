@@ -489,19 +489,21 @@ public class AccesoDatos {
 
         return idPunto[0];
     }
-//ESTE METODO AUN NO ANDA.... VER PORQUE....
 
     public boolean insertarObstaculo(int idTipoObstaculo, String comentarios, String imagen, int idUsuario, int idPunto, String fechaBaja, int contadorSolucion, int estado) {
         AtomicBoolean exito = new AtomicBoolean(false);
 
+        executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
+            Connection con = null;
             try {
                 Class.forName(DataDB.driver);
-                String query = "INSERT INTO Obstaculos (ID_TipoObstaculo, Comentarios, Imagen, FechaCreacion, ID_Usuario, ID_Punto, FechaBaja, ContadorSolucion, Estado) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?)";
+                con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
 
-                try (Connection conn = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
-                     PreparedStatement ps = conn.prepareStatement(query)) {
+                String query = "INSERT INTO Obstaculos (ID_TipoObstaculo, Comentarios, Imagen, FechaCreacion, ID_Usuario, ID_Punto, FechaBaja, ContadorSolucion, Estado) " +
+                        "VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?)";
 
+                try (PreparedStatement ps = con.prepareStatement(query)) {
                     ps.setInt(1, idTipoObstaculo);
                     ps.setString(2, comentarios);
                     ps.setString(3, imagen);
@@ -512,14 +514,28 @@ public class AccesoDatos {
                     ps.setInt(8, estado);
 
                     int rowsAffected = ps.executeUpdate();
-
                     exito.set(rowsAffected > 0);
                 }
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
+            } finally {
+                if (con != null) {
+                    try {
+                        con.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
+        try {
+            executor.shutdown();
+            executor.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         return exito.get();
     }
+
 }
