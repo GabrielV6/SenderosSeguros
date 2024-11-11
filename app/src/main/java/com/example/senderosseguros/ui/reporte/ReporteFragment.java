@@ -1,6 +1,6 @@
 package com.example.senderosseguros.ui.reporte;
 
-import static com.example.senderosseguros.R.id.radioGroup;
+
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +22,8 @@ import androidx.fragment.app.Fragment;
 import com.example.senderosseguros.R;
 import com.example.senderosseguros.conexion.AccesoDatos;
 import com.example.senderosseguros.databinding.FragmentReporteBinding;
-import com.github.mikephil.charting.charts.HorizontalBarChart; // Cambiar a HorizontalBarChart
+import com.example.senderosseguros.entidad.ObstaculoReporte;
+import com.github.mikephil.charting.charts.HorizontalBarChart; // Cambia a HorizontalBarChart
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -35,6 +37,7 @@ public class ReporteFragment extends Fragment {
     private FragmentReporteBinding binding;
     private HorizontalBarChart barChart;
     private AccesoDatos accesoDatos;
+    private RadioButton rb_Barrio, rb_Obstaculo, rb_Periodo;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -44,7 +47,7 @@ public class ReporteFragment extends Fragment {
         View root = binding.getRoot();
 
         accesoDatos = new AccesoDatos(getContext());
-       // setupSpinners();
+        cargarSpinners();
 
         barChart = root.findViewById(R.id.barChart);
         Button buttonGenerar = root.findViewById(R.id.buttonGenerar);
@@ -53,65 +56,50 @@ public class ReporteFragment extends Fragment {
         buttonGenerar.setOnClickListener(v -> mostrarGrafico());
         buttonVolver.setOnClickListener(v -> mostrarElementos());
 
+        //  RadioButtons
+        rb_Barrio = root.findViewById(R.id.rbBarrio);
+        rb_Obstaculo = root.findViewById(R.id.rbObstaculo);
+        rb_Periodo = root.findViewById(R.id.rbTiempo);
+
         textUltimosTresMeses = root.findViewById(R.id.textUltimosTresMeses);
+        deshabilitarTodosLosSpinners();
 
         // Obtener el RadioGroup
         RadioGroup radioGroup = root.findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            // Deshabilitar todos los Spinners antes de habilitar el correspondiente
+            deshabilitarTodosLosSpinners();
+            limpiarTodosLosSpinners();
+            // Acción según el RadioButton seleccionado
+            if (checkedId ==  R.id.rbBarrio) {
+                binding.spinnerBarrio.setEnabled(true);
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // Acción según el RadioButton seleccionado con if
-                if (checkedId == R.id.rbBarrio) {
-                    // Mostrar spinner correspondiente
-                    habilitarSpinnerBarrio();
-                } else if (checkedId == R.id.rbObstaculo) {
-                    // Mostrar spinner correspondiente
-                    habilitarSpinnerObstaculo();
-                } else if (checkedId == R.id.rbTiempo) {
-                    // Mostrar spinner correspondiente
-                    habilitarSpinnerTiempo();
-                }
+            } else if (checkedId == R.id.rbObstaculo) {
+                binding.spinnerObstaculo.setEnabled(true);
+
+            } else if (checkedId == R.id.rbTiempo) {
+                binding.spinnerTiempo.setEnabled(true);
             }
+
         });
         return root;
     }
 
-    private void habilitarSpinnerBarrio() {
-        // Inhabilitar los spinners que no se están utilizando
-        binding.spinnerObstaculo.setEnabled(false);
-        binding.spinnerTiempo.setEnabled(false);
-
-        // Hacer el spinner de Barrio visible y habilitarlo
-        binding.spinnerBarrio.setVisibility(View.VISIBLE);
-        binding.spinnerBarrio.setEnabled(true);
-    }
-
-    private void habilitarSpinnerObstaculo() {
-        // Inhabilitar los spinners que no se están utilizando
-        binding.spinnerBarrio.setEnabled(false);
-        binding.spinnerTiempo.setEnabled(false);
-
-        // Hacer el spinner de Obstáculo visible y habilitarlo
-        binding.spinnerObstaculo.setVisibility(View.VISIBLE);
-        binding.spinnerObstaculo.setEnabled(true);
-    }
-
-    private void habilitarSpinnerTiempo() {
-        // Inhabilitar los spinners que no se están utilizando
+    private void deshabilitarTodosLosSpinners() {
         binding.spinnerBarrio.setEnabled(false);
         binding.spinnerObstaculo.setEnabled(false);
-
-        // Hacer el spinner de Tiempo visible y habilitarlo
-        binding.spinnerTiempo.setVisibility(View.VISIBLE);
-        binding.spinnerTiempo.setEnabled(true);
+        binding.spinnerTiempo.setEnabled(false);
     }
+    private void limpiarTodosLosSpinners() {
+       binding.spinnerBarrio.setSelection(0);
+        binding.spinnerObstaculo.setSelection(0);
+        binding.spinnerTiempo.setSelection(0);}
 
+    private void cargarSpinners() {
 
-    private void setupSpinners() {
-        // Spinner para "Barrio"
         String seleccionarBarrio = getString(R.string.sp_barrio);
         String seleccionarTipo = getString(R.string.sp_tipo);
+        String seleccionarPeriodo = getString(R.string.sp_periodo);
 
         // Spinner para "Barrio"
         new Thread(() -> {
@@ -139,6 +127,19 @@ public class ReporteFragment extends Fragment {
             });
         }).start();
 
+        // Spinner para "Periodos"
+//        new Thread(() -> {
+//            List<String> periodos = accesoDatos.obtenerPeriodos();
+//            periodos.add(0, seleccionarPeriodo);
+//
+//            new Handler(Looper.getMainLooper()).post(() -> {
+//                ArrayAdapter<String> periodoAdapter = new ArrayAdapter<>(getContext(),
+//                        android.R.layout.simple_spinner_item, periodos);
+//                periodoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                binding.spinnerTiempo.setAdapter(periodoAdapter);
+//            });
+//        }).start();
+
         // Spinner para "Periodo"
         ArrayAdapter<CharSequence> periodoAdapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.periodo_options, android.R.layout.simple_spinner_item);
@@ -148,69 +149,36 @@ public class ReporteFragment extends Fragment {
 
     private void mostrarGrafico() {
 
-        AccesoDatos accesoDatos = new AccesoDatos(requireContext());
-        boolean existe = accesoDatos.obtenerTextoDesdeBD();
-
-        if(existe){
-            Toast.makeText(this.getContext(), "CONECTA ok>", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(this.getContext(), "NO CONECTA =(", Toast.LENGTH_SHORT).show();
+       AccesoDatos accesoDatos = new AccesoDatos(requireContext());
+        // Obtener el valor seleccionado en el Spinner
+        String selectedBarrio = binding.spinnerBarrio.getSelectedItem().toString();
+        if (selectedBarrio.isEmpty()) {
+            Toast.makeText(getContext(), "Por favor, selecciona un barrio válido.", Toast.LENGTH_SHORT).show();
+            return;  // Salir si no se seleccionó un barrio
         }
 
-        /*new Thread(() -> {
-            // Realiza la llamada a la base de datos en un hilo en segundo plano
-            int id = 3;
-            boolean existe = accesoDatos.obtenerTextoDesdeBD(id);
-            String texto = "";
-            if(existe){
-                texto = " FUNCIONA";
-            }
-
-            // Actualiza la interfaz de usuario en el hilo principal
-            /*getActivity().runOnUiThread(() -> {
-                textUltimosTresMeses.setText(texto);
-            });
-        }).start();*/
-
-        // Ocultar elementos antes de mostrar el gráfico
+        // Llamar al metodo con el nombre del barrio
+        List<ObstaculoReporte> obstaculos= accesoDatos.obtenerObstaculosPorBarrio(selectedBarrio);
+        int checkedId = getCheckedRadioButtonId();
+        String texto = llenarTipoReporte(checkedId);
+        binding.textUltimosTresMeses.setText(texto);
         ocultarElementos();
-
-        // Datos harcodeados grafico. El grafico se adapta o sea si pongo como valor maximo 100
         List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, 85));
-        entries.add(new BarEntry(1, 20));
-        entries.add(new BarEntry(2, 30));
-        entries.add(new BarEntry(3, 56));
-        entries.add(new BarEntry(4, 20));
-        entries.add(new BarEntry(5, 30));
+        int index = 0;
+        // Llenar los datos del gráfico con la lista de obstáculos
+        for (ObstaculoReporte obstaculo : obstaculos) {
+            entries.add(new BarEntry(index++, obstaculo.getCantidad()));
+        }
 
-        BarDataSet dataSet = new BarDataSet(entries, "");
-        dataSet.setDrawValues(true);
-        dataSet.setValueTextSize(12f); // Cambia el tamaño del texto si es necesario
-        dataSet.setValueTextColor(Color.RED); // Cambia el color del texto
-        List<Integer> colors = new ArrayList<>();
-        colors.add(Color.GRAY);
-        colors.add(Color.LTGRAY);
-        colors.add(Color.DKGRAY);
-        colors.add(Color.RED);
-        colors.add(Color.GRAY);
-        colors.add(Color.LTGRAY);
+        // Crear y configurar el conjunto de datos para el gráfico de barras
+        BarDataSet dataSet = new BarDataSet(entries, "Obstáculos");
+        dataSet.setColor(Color.BLUE); // Establecer el color de las barras
+        dataSet.setValueTextColor(Color.BLACK); // Establecer el color del texto en las barras
 
-        dataSet.setColors(colors);
-
-
+        // Crear el objeto BarData y establecerlo en el gráfico
         BarData barData = new BarData(dataSet);
         barChart.setData(barData);
-        barChart.invalidate(); // Actualiza el gráfico
-        barChart.getAxisLeft().setDrawGridLines(false);
-        barChart.getAxisRight().setDrawGridLines(false);
-        barChart.getXAxis().setDrawGridLines(false);
-        barChart.getDescription().setEnabled(false);
-        barChart.getXAxis().setEnabled(false);
-        barChart.getLegend().setEnabled(false);
-
-        // Hacer visible el grafico
-        barChart.setVisibility(View.VISIBLE);
+        barChart.invalidate(); // Actualizar el gráfico para mostrar los nuevos datos
     }
 
     private void ocultarElementos() {
@@ -250,6 +218,7 @@ public class ReporteFragment extends Fragment {
         binding.textUltimosTresMeses.setVisibility(View.GONE);
         // Ocultar el botón volver
         binding.buttonVolver.setVisibility(View.GONE);
+        limpiarRbSpinner();
     }
 
     @Override
@@ -271,4 +240,32 @@ public class ReporteFragment extends Fragment {
         binding.rbObstaculo.setEnabled(!barrioSelected && !tiempoSelected);
         binding.rbTiempo.setEnabled(!barrioSelected && !obstaculoSelected);
     }
+
+    private void limpiarRbSpinner() {
+        binding.rbBarrio.setChecked(false);
+        binding.rbObstaculo.setChecked(false);
+        binding.rbTiempo.setChecked(false);
+        binding.spinnerBarrio.setSelection(0);
+        binding.spinnerObstaculo.setSelection(0);
+        binding.spinnerTiempo.setSelection(0);
+    }
+
+    private String llenarTipoReporte(int rbSeleccionado) {
+        String texto = "";
+
+        if (rbSeleccionado == R.id.rbBarrio) {
+            texto = getString(R.string.sp_barrio);
+        } else if (rbSeleccionado == R.id.rbObstaculo) {
+            texto = binding.spinnerObstaculo.getSelectedItem().toString();
+        } else if (rbSeleccionado == R.id.rbTiempo) {
+            texto = binding.spinnerTiempo.getSelectedItem().toString();
+        }
+
+        return texto;
+    }
+    private int getCheckedRadioButtonId() {
+        RadioGroup radioGroup = binding.radioGroup;
+        return radioGroup.getCheckedRadioButtonId();
+    }
+
 }

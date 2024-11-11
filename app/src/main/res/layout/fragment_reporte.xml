@@ -12,6 +12,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_margin="16dp"
+        android:layout_marginStart="48dp"
         android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/boton_volver"
         android:src="@drawable/ic_volver"
@@ -23,13 +24,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="56dp"
         android:layout_marginEnd="8dp"
         android:text="Informe de Obstaculos"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/buttonVolver" />
 
@@ -46,7 +48,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_reporte" /> <!-- Inicialmente invisible -->
 
-
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
@@ -57,90 +58,65 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_reporte">
 
-        <!-- Rboton y Spinner Barrio -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:orientation="vertical">
-
-            <RadioButton
+        <RadioButton
                 android:id="@+id/rbBarrio"
                 android:layout_width="334dp"
                 android:layout_height="wrap_content"
                 android:text="@string/rbBarrio"
-                android:textColor="#121212" />
+                android:textColor="#121212"
+                android:textSize="16sp" />
 
-            <Spinner
-                android:id="@+id/spinnerBarrio"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/spinner_background"
-                android:padding="16dp"
-                android:textColor="@color/white" />
-        </LinearLayout>
-
-        <!-- Rboton y Spinner Obstaculo -->
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <Spinner
+            android:id="@+id/spinnerBarrio"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:orientation="vertical">
+            android:layout_marginTop="8dp"
+            android:background="@drawable/spinner_background"
+            android:padding="16dp"
+            android:textColor="@color/material_dynamic_neutral_variant99" />
 
-            <RadioButton
-                android:id="@+id/rbObstaculo"
-                android:layout_width="333dp"
-                android:layout_height="wrap_content"
-                android:text="@string/rbObstaculo"
-                android:textColor="#121212" />
-
-            <Spinner
-                android:id="@+id/spinnerObstaculo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/spinner_background"
-                android:padding="16dp" />
-        </LinearLayout>
-
-        <!-- Rboton y Spinner Tiempo -->
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <RadioButton
+            android:id="@+id/rbObstaculo"
+            android:layout_width="333dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:orientation="vertical">
+            android:text="@string/rbObstaculo"
+            android:textColor="#121212"
+            android:textSize="16sp" />
 
-            <RadioButton
+        <Spinner
+            android:id="@+id/spinnerObstaculo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:background="@drawable/spinner_background"
+            android:padding="16dp" />
+
+        <RadioButton
                 android:id="@+id/rbTiempo"
                 android:layout_width="333dp"
                 android:layout_height="wrap_content"
                 android:text="@string/rbTiempo"
-                android:textColor="#121212" />
+                android:textColor="#121212"
+                android:textSize="16sp" />
 
-            <Spinner
-                android:id="@+id/spinnerTiempo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/spinner_background"
-                android:padding="16dp" />
-        </LinearLayout>
+        <Spinner
+            android:id="@+id/spinnerTiempo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/spinner_background"
+            android:padding="16dp" />
+
+
     </RadioGroup>
+
+<!--ACA AGREGO-->
 
     <Button
         android:id="@+id/buttonGenerar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="#FF3B30"
         android:text="GENERAR"
@@ -148,7 +124,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/radioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
 
     <!-- BarChart -->
     <com.github.mikephil.charting.charts.HorizontalBarChart
@@ -162,6 +139,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_reporte" /> <!-- Inicialmente invisible -->
+        app:layout_constraintTop_toBottomOf="@+id/text_reporte" />
+
+    <!-- Inicialmente invisible -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.example.senderosseguros.conexion;
 
 import android.content.Context;
 
+import com.example.senderosseguros.entidad.ObstaculoReporte;
 import com.example.senderosseguros.entidad.Usuario;
 
 import java.sql.Connection;
@@ -97,6 +98,64 @@ public class AccesoDatos {
 
         return barrios;
     }
+    public List<ObstaculoReporte> obtenerObstaculosPorBarrio(String nombreBarrio) {
+        List<ObstaculoReporte> obstaculos = new ArrayList<>();
+        executor = Executors.newSingleThreadExecutor();
+
+        // Usar Future para manejar la consulta de manera asíncrona
+        Future<List<ObstaculoReporte>> result = executor.submit(() -> {
+            List<ObstaculoReporte> listaObstaculos = new ArrayList<>();
+            Connection con = null;
+            try {
+                // Establecer la conexión con la base de datos
+                Class.forName(DataDB.driver);
+                con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+
+                // Consulta para obtener los obstáculos por barrio
+                String query = "SELECT C.Descripcion AS Obstaculo, COUNT(O.ID_Obstaculo) AS Cantidad " +
+                        "FROM Obstaculos O " +
+                        "JOIN Puntos P ON O.ID_Punto = P.ID_Punto " +
+                        "JOIN CatalogoObstaculos C ON O.ID_TipoObstaculo = C.ID_TipoObstaculo " +
+                        "JOIN Barrios B ON P.ID_Barrio = B.ID_Barrio " +
+                        "WHERE B.Descripcion = ? " + // Utilizar el nombre del barrio
+                        "GROUP BY C.Descripcion";
+
+                PreparedStatement ps = con.prepareStatement(query);
+                ps.setString(1, nombreBarrio); // Establecer el nombre del barrio
+
+                ResultSet rs = ps.executeQuery();
+
+                // Recuperar los resultados de la consulta y agregarlos a la lista
+                while (rs.next()) {
+                    String descripcion = rs.getString("Obstaculo");
+                    int cantidad = rs.getInt("Cantidad");
+                    listaObstaculos.add(new ObstaculoReporte(descripcion, cantidad)); // Agregar los objetos ObstaculoReporte
+                }
+
+                rs.close();
+                ps.close();
+                con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return listaObstaculos;
+        });
+
+        // Esperar a que el hilo termine y obtener el resultado
+        try {
+            obstaculos = result.get();  // Esto espera hasta que la consulta se complete
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            executor.shutdown();  // Cerrar el executor después de obtener el resultado
+        }
+
+        return obstaculos;
+    }
+
+
+
 
     public List<String> obtenerObstaculosActivos() {
         List<String> obstaculos = new ArrayList<>();
