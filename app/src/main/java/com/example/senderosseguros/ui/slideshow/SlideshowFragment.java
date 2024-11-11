@@ -36,6 +36,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -154,34 +155,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         uiSettings.setTiltGesturesEnabled(true);
         uiSettings.setRotateGesturesEnabled(true);
 
-        AccesoDatos accesoDatos = new AccesoDatos(requireContext());
-        List<ObstaculoMarcadores> obstacles = accesoDatos.getObstaculos();
-
-        for (ObstaculoMarcadores obstaculo : obstacles) {
-            LatLng position = new LatLng(obstaculo.getLatitud(), obstaculo.getLongitud());
-            String title = "Tipo: " + obstaculo.getDescripcionObstaculo();
-
-            float markerColor;
-            switch (obstaculo.getIdTipoObstaculo()) {
-                case 1:
-                    markerColor = BitmapDescriptorFactory.HUE_YELLOW;
-                    break;
-                case 2:
-                    markerColor = BitmapDescriptorFactory.HUE_GREEN;
-                    break;
-                case 3:
-                    markerColor = BitmapDescriptorFactory.HUE_BLUE;
-                    break;
-                default:
-                    markerColor = BitmapDescriptorFactory.HUE_ORANGE;
-                    break;
-            }
-
-            mMap.addMarker(new MarkerOptions()
-                    .position(position)
-                    .title(title)
-                    .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
-        }
+        obstaculosMarcados();
 
         // Habilita el listener para capturar clics en el mapa
         mMap.setOnMapClickListener(latLng -> {
@@ -232,6 +206,58 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             }
         });
         //rutaEnMapa(mMap);
+    }
+
+    private void obstaculosMarcados() {
+        AccesoDatos accesoDatos = new AccesoDatos(requireContext());
+        List<ObstaculoMarcadores> obstacles = accesoDatos.getObstaculos();
+
+        for (ObstaculoMarcadores obstaculo : obstacles) {
+            LatLng position = new LatLng(obstaculo.getLatitud(), obstaculo.getLongitud());
+            String title = "Tipo: " + obstaculo.getDescripcionObstaculo();
+
+            //int resourse= 0;
+            float markerColor;
+            switch (obstaculo.getIdTipoObstaculo()) {
+                case 1:
+                    mMap.addMarker(new MarkerOptions()
+                            .position(position)
+                            .title(title)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.cascochica)));
+                    break;
+                case 2:
+                    mMap.addMarker(new MarkerOptions()
+                            .position(position)
+                            .title(title)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.pisochica)));
+                    break;
+                case 3:
+                    mMap.addMarker(new MarkerOptions()
+                            .position(position)
+                            .title(title)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.rampachica)));
+                    break;
+                case 4:
+                    mMap.addMarker(new MarkerOptions()
+                            .position(position)
+                            .title(title)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.peligrochica)));
+                    break;
+                case 5:
+                    mMap.addMarker(new MarkerOptions()
+                            .position(position)
+                            .title(title)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.vallachica)));
+                    break;
+                case 6:
+                    mMap.addMarker(new MarkerOptions()
+                            .position(position)
+                            .title(title)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.conochica)));
+                    break;
+            }
+
+        }
     }
 
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
@@ -322,6 +348,5 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             Log.e(TAG, "Verifique los permisos de ubicacion: ", e);
         }
     }
-
 
 }

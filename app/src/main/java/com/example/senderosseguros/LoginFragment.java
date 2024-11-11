@@ -89,6 +89,7 @@ public class LoginFragment extends Fragment {
         AccesoDatos accesoDatos = new AccesoDatos(requireContext());
 
         boolean existe = accesoDatos.existeUserPass(user, pass);
+        //boolean existe = true;
         String correo = accesoDatos.recuperarCorreo(user);
 
         if (existe) {
