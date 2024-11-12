@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String user = intent.getStringExtra("user");
         String correo = intent.getStringExtra("correo");
-        //int ID_User = intent.getIntExtra("ID_User", -1); // Si "ID_User" existe, obtendrás su valor; si no, -1.
+        int ID_User = intent.getIntExtra("ID_User", -1); // Si "ID_User" existe, obtendrás su valor; si no, -1.
 
 
         // Actualizar los TextViews en el header del Navigation Drawer
@@ -79,11 +79,12 @@ public class MainActivity extends AppCompatActivity {
             View headerView = navigationView.getHeaderView(0); // Obtener la vista del header
             TextView tvUser = headerView.findViewById(R.id.tv_user);
             TextView tvCorreo = headerView.findViewById(R.id.tv_correo);
-            //TextView tvIDUser = headerView.findViewById(R.id.tv_IDUser);
+            TextView tvIDUser = headerView.findViewById(R.id.tv_IDUser);
 
             tvUser.setText(user);
             tvCorreo.setText(correo);
-            //tvIDUser.setText(ID_User);
+            tvIDUser.setText(String.valueOf(ID_User));
+
 
             navController.navigate(R.id.nav_home);
         }
