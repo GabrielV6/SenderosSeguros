@@ -189,6 +189,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             if (punto1!=null && punto2!=null) {
                 mMap.clear();
                 getCurrentLocation();
+                obstaculosMarcados();
                 punto2 = null;
                 isFirstPoint = false;
             }
