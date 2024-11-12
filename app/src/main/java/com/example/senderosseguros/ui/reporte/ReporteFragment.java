@@ -1,7 +1,5 @@
 package com.example.senderosseguros.ui.reporte;
 
-
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,17 +16,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-
 import com.example.senderosseguros.R;
 import com.example.senderosseguros.conexion.AccesoDatos;
 import com.example.senderosseguros.databinding.FragmentReporteBinding;
 import com.example.senderosseguros.entidad.ItemReporte;
-import com.github.mikephil.charting.charts.HorizontalBarChart; // Cambia a HorizontalBarChart
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +34,7 @@ import android.os.Looper;
 public class ReporteFragment extends Fragment {
     private TextView textUltimosTresMeses;
     private FragmentReporteBinding binding;
-    private HorizontalBarChart barChart;
+    private PieChart pieChart;
     private AccesoDatos accesoDatos;
     private RadioButton rb_Barrio, rb_Obstaculo, rb_Periodo;
 
@@ -52,7 +48,7 @@ public class ReporteFragment extends Fragment {
         accesoDatos = new AccesoDatos(getContext());
         cargarSpinners();
 
-        barChart = root.findViewById(R.id.barChart);
+        pieChart = root.findViewById(R.id.pieChart);
         Button buttonGenerar = root.findViewById(R.id.buttonGenerar);
         ImageButton buttonVolver = root.findViewById(R.id.buttonVolver);
 
@@ -186,26 +182,25 @@ public class ReporteFragment extends Fragment {
             return;
         }
 
-        // Set the report type description based on the selected option
+        // Texto del reporte basado en el RadioButton seleccionado
         String texto = llenarTipoReporte(checkedId);
         binding.textUltimosTresMeses.setText(texto);
         ocultarElementos();
 
-        List<BarEntry> entries = new ArrayList<>();
-        int index = 0;
-
-        // Fill the bar chart data with the obstacles list
-        for (ItemReporte obstaculo : datos) {
-            entries.add(new BarEntry(index++, obstaculo.getCantidad()));
+        List<PieEntry> entries = new ArrayList<>();
+        for (ItemReporte item : datos) {
+            entries.add(new PieEntry(item.getCantidad(), item.getDescripcion()));
         }
 
-        BarDataSet dataSet = new BarDataSet(entries, "Obstáculos");
-        dataSet.setColor(Color.BLUE);
+        PieDataSet dataSet = new PieDataSet(entries, "Obstáculos");
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setValueTextSize(12f);
 
-        BarData barData = new BarData(dataSet);
-        binding.barChart.setData(barData);
-        binding.barChart.invalidate(); // Refresh the chart to display new data
+        PieData pieData = new PieData(dataSet);
+        pieChart.setData(pieData);
+        pieChart.setUsePercentValues(true);
+        pieChart.invalidate();
     }
 
     private void ocultarElementos() {
@@ -226,7 +221,7 @@ public class ReporteFragment extends Fragment {
         binding.buttonVolver.setVisibility(View.VISIBLE);
 
         // Hacer visible el gráfico
-        barChart.setVisibility(View.VISIBLE);
+        pieChart.setVisibility(View.VISIBLE);
         binding.textUltimosTresMeses.setVisibility(View.VISIBLE);
     }
 
@@ -241,7 +236,7 @@ public class ReporteFragment extends Fragment {
         binding.rbTiempo.setVisibility(View.VISIBLE);
 
         // Ocultar el GRAFICO Y TEXTO
-        barChart.setVisibility(View.GONE);
+        pieChart.setVisibility(View.GONE);
         binding.textUltimosTresMeses.setVisibility(View.GONE);
         // Ocultar el botón volver
         binding.buttonVolver.setVisibility(View.GONE);
@@ -289,11 +284,6 @@ public class ReporteFragment extends Fragment {
         }
 
         return texto;
-    }
-
-    private int getCheckedRadioButtonId() {
-        RadioGroup radioGroup = binding.radioGroup;
-        return radioGroup.getCheckedRadioButtonId();
     }
 
 }
