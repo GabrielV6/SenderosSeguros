@@ -127,12 +127,12 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setUpOptionButtons() {
-        binding.iconOption1.setOnClickListener(v -> handleOptionSelection("Obra"));
-        binding.iconOption2.setOnClickListener(v -> handleOptionSelection("Piso Resbaladizo"));
-        binding.iconOption3.setOnClickListener(v -> handleOptionSelection("Rampa"));
-        binding.iconOption4.setOnClickListener(v -> handleOptionSelection("Peligro"));
-        binding.iconOption5.setOnClickListener(v -> handleOptionSelection("Cierre"));
-        binding.iconOption6.setOnClickListener(v -> handleOptionSelection("Vereda bloqueada"));
+        binding.iconOption1.setOnClickListener(v -> handleOptionSelection("1"));
+        binding.iconOption2.setOnClickListener(v -> handleOptionSelection("2"));
+        binding.iconOption3.setOnClickListener(v -> handleOptionSelection("3"));
+        binding.iconOption4.setOnClickListener(v -> handleOptionSelection("4"));
+        binding.iconOption5.setOnClickListener(v -> handleOptionSelection("5"));
+        binding.iconOption6.setOnClickListener(v -> handleOptionSelection("6"));
     }
 
     private void handleOptionSelection(String option) {

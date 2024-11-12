@@ -2,8 +2,11 @@ package com.example.senderosseguros.conexion;
 
 import android.content.Context;
 
+import com.example.senderosseguros.entidad.Barrio;
 import com.example.senderosseguros.entidad.ItemReporte;
 import com.example.senderosseguros.entidad.ObstaculoMarcadores;
+import com.example.senderosseguros.entidad.Punto;
+import com.example.senderosseguros.entidad.TipoObstaculo;
 import com.example.senderosseguros.entidad.Usuario;
 
 import java.sql.Connection;
@@ -19,6 +22,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AccesoDatos {
 
@@ -66,21 +70,23 @@ public class AccesoDatos {
 
         return existe[0];
     }
-    public List<String> obtenerBarrios() {
-        List<String> barrios = new ArrayList<>();
+    public List<Barrio> obtenerBarrios() {
+        List<Barrio> barrios = new ArrayList<>();
+        executor = Executors.newSingleThreadExecutor();
 
-        executor.execute(() -> {
+        executor.execute(() -> {  // Usamos executor para ejecutar la tarea en segundo plano
             Connection con = null;
             try {
                 Class.forName(DataDB.driver);
                 con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
-                String query = "SELECT Descripcion FROM Barrios";
+                String query = "SELECT ID_Barrio, Descripcion FROM Barrios"; // Traemos tanto el ID como la Descripción
                 PreparedStatement ps = con.prepareStatement(query);
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()) {
+                    int idBarrio = rs.getInt("ID_Barrio"); // Traemos el ID
                     String descripcion = rs.getString("Descripcion");
-                    barrios.add(descripcion);
+                    barrios.add(new Barrio(idBarrio, descripcion)); // Agregamos el objeto Barrio a la lista
                 }
 
                 rs.close();
@@ -91,9 +97,9 @@ public class AccesoDatos {
             }
         });
 
+        // Esperamos a que termine la tarea en segundo plano antes de continuar (pero esto es sólo para ejemplo, puede ser mejor usar un Callback).
         try {
-            executor.shutdown();
-            executor.awaitTermination(5, TimeUnit.SECONDS);
+            executor.awaitTermination(5, TimeUnit.SECONDS); // Esto espera un máximo de 5 segundos para que se complete la tarea
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -545,7 +551,7 @@ public class AccesoDatos {
         return obstacles;
     }
 
-    public int insertarPunto(double latitud, double longitud, int idBarrio) {
+    public int insertarPunto(Punto punto) {
         final int[] idPunto = {-1}; // Usamos un array para obtener el valor dentro del Executor
 
         executor.execute(() -> {
@@ -557,9 +563,9 @@ public class AccesoDatos {
                 try (Connection conn = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
                      PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-                    ps.setDouble(1, latitud);
-                    ps.setDouble(2, longitud);
-                    ps.setInt(3, idBarrio);
+                    ps.setDouble(1, punto.getLatitud());
+                    ps.setDouble(2, punto.getLongitud());
+                    ps.setInt(3, punto.getBarrio().getIdBarrio());
 
                     int rowsAffected = ps.executeUpdate();
 
@@ -668,5 +674,46 @@ public class AccesoDatos {
 
         return IDUser;
     }
+
+    public TipoObstaculo obtenerTipoObstaculoPorId(int id) {
+        AtomicReference<TipoObstaculo> tipoObstaculo = new AtomicReference<>();
+
+        executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            Connection con = null;
+            try {
+                Class.forName(DataDB.driver);
+                con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                // Consulta actualizada con los nombres de columna correctos
+                String query = "SELECT ID_TipoObstaculo, Descripcion, Estado FROM CatalogoObstaculos WHERE ID_TipoObstaculo = ? AND Estado = 1";
+                PreparedStatement ps = con.prepareStatement(query);
+                ps.setInt(1, id);  // Establecemos el valor del parámetro ID
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    tipoObstaculo.set(new TipoObstaculo(
+                            rs.getInt("ID_TipoObstaculo"),
+                            rs.getString("Descripcion")
+                    ));
+                }
+
+                rs.close();
+                ps.close();
+                con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        try {
+            executor.shutdown();
+            executor.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return tipoObstaculo.get();
+    }
+
 
 }

@@ -12,7 +12,6 @@ public class Punto {
     }
 
     public Punto(int idPunto, double latitud, double longitud, Barrio barrio) {
-        this.idPunto = idPunto;
         this.latitud = latitud;
         this.longitud = longitud;
         this.barrio = barrio;
@@ -20,10 +19,6 @@ public class Punto {
 
     public int getIdPunto() {
         return idPunto;
-    }
-
-    public void setIdPunto(int idPunto) {
-        this.idPunto = idPunto;
     }
 
     public double getLatitud() {

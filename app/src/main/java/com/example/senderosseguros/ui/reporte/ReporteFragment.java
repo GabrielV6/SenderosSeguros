@@ -104,8 +104,8 @@ public class ReporteFragment extends Fragment {
         String seleccionarTipo = getString(R.string.sp_tipo);
         String seleccionarPeriodo = getString(R.string.sp_periodo);
 
-        // Spinner para "Barrio"
-        new Thread(() -> {
+        // Spinner para "Barrio" ACA LO COMENTE PORQUE CAMBIE EL METODO DEL LLENADO AHORA TRAE EL ID )SE DEBE AJUSTAR)
+    /*    new Thread(() -> {
             List<String> barrios = accesoDatos.obtenerBarrios();
             barrios.add(0, seleccionarBarrio);
 
@@ -115,7 +115,7 @@ public class ReporteFragment extends Fragment {
                 barrioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 binding.spinnerBarrio.setAdapter(barrioAdapter);
             });
-        }).start();
+        }).start();*/
 
         // Spinner para "Tipo de Obstáculo"
         new Thread(() -> {
