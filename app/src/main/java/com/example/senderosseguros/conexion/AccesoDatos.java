@@ -123,7 +123,7 @@ public class AccesoDatos {
                         "JOIN Puntos P ON O.ID_Punto = P.ID_Punto " +
                         "JOIN CatalogoObstaculos C ON O.ID_TipoObstaculo = C.ID_TipoObstaculo " +
                         "JOIN Barrios B ON P.ID_Barrio = B.ID_Barrio " +
-                        "WHERE B.Descripcion = ? " +
+                        "WHERE B.Descripcion = ? AND O.Estado = 1" +
                         "GROUP BY C.Descripcion";
 
                 PreparedStatement ps = con.prepareStatement(query);
@@ -176,6 +176,7 @@ public class AccesoDatos {
                         "JOIN CatalogoObstaculos C ON O.ID_TipoObstaculo = C.ID_TipoObstaculo " +
                         "JOIN Barrios B ON P.ID_Barrio = B.ID_Barrio " +
                         "WHERE C.Descripcion = ? " +
+                        "AND O.Estado = 1 " +
                         "GROUP BY B.Descripcion";
 
                 PreparedStatement ps = con.prepareStatement(query);
@@ -222,10 +223,12 @@ public class AccesoDatos {
                 Class.forName(DataDB.driver);
                 con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
 
-                String query = "SELECT O.Estado, COUNT(O.ID_Obstaculo) AS Cantidad " +
+                String query = "SELECT " +
+                        "CASE WHEN O.Estado = 1 THEN 'Activo' ELSE 'Inactivo' END AS Estado, " +
+                        "COUNT(O.ID_Obstaculo) AS Cantidad " +
                         "FROM Obstaculos O " +
                         "WHERE O.FechaCreacion >= ? " +
-                        "GROUP BY O.Estado";
+                        "GROUP BY Estado";
 
                 PreparedStatement ps = con.prepareStatement(query);
                 ps.setString(1, fecha);
