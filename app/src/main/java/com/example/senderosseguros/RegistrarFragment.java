@@ -69,12 +69,11 @@ public class RegistrarFragment extends Fragment {
              Toast.makeText(getContext(), "Todos los campos deben estar llenos.", Toast.LENGTH_SHORT).show();
              return;
          }
-
+        // Validación para condiciones de la pass
          if (!validarContrasena(et_pass)) {
              Toast.makeText(getContext(), "La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula y un número.", Toast.LENGTH_SHORT).show();
              return;
          }
-
 
          // Verificación de longitud máxima de 9 dígitos para dni
          if (et_dni.length() > 9) {
@@ -90,6 +89,13 @@ public class RegistrarFragment extends Fragment {
 
          if (!et_apellido.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+")) {
              Toast.makeText(getContext(), "El apellido no debe contener números.", Toast.LENGTH_SHORT).show();
+             return;
+         }
+
+         //Verificación para que el correo tenga el formato correcto
+         if (!et_correo.matches("^[\\w.-]+@[a-zA-Z\\d.-]+\\.[a-zA-Z]{2,6}$")) {
+             // El formato de correo electrónico es inválido
+             Toast.makeText(getContext(), "Por favor, ingresa un correo electrónico válido.", Toast.LENGTH_SHORT).show();
              return;
          }
 

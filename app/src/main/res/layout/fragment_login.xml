@@ -46,7 +46,7 @@ tools:context=".LoginFragment">
             android:hint="Usuario"
             android:inputType="text"
             android:text=""
-            android:textSize="20sp" />
+            android:textSize="22sp" />
 
         <EditText
             android:id="@+id/et_pass"
@@ -56,7 +56,7 @@ tools:context=".LoginFragment">
             android:ems="10"
             android:hint="Contraseña"
             android:inputType="textPassword"
-            android:textSize="20sp" />
+            android:textSize="22sp" />
 
         <View
             android:layout_width="0dp"
@@ -70,7 +70,7 @@ tools:context=".LoginFragment">
             android:layout_gravity="bottom"
             android:padding="10dp"
             android:text="@string/btn_ingresar"
-            android:textSize="20sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/tv_regis"
