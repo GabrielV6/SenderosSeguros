@@ -123,7 +123,8 @@ public class AccesoDatos {
                         "JOIN Puntos P ON O.ID_Punto = P.ID_Punto " +
                         "JOIN CatalogoObstaculos C ON O.ID_TipoObstaculo = C.ID_TipoObstaculo " +
                         "JOIN Barrios B ON P.ID_Barrio = B.ID_Barrio " +
-                        "WHERE B.Descripcion = ? AND O.Estado = 1" +
+                        "WHERE B.Descripcion = ? " +
+                        "AND O.Estado = 1 " +
                         "GROUP BY C.Descripcion";
 
                 PreparedStatement ps = con.prepareStatement(query);
