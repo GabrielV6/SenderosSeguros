@@ -2,7 +2,7 @@ package com.example.senderosseguros.conexion;
 
 import android.content.Context;
 
-import com.example.senderosseguros.entidad.ObstaculoReporte;
+import com.example.senderosseguros.entidad.ItemReporte;
 import com.example.senderosseguros.entidad.ObstaculoMarcadores;
 import com.example.senderosseguros.entidad.Usuario;
 
@@ -100,43 +100,41 @@ public class AccesoDatos {
 
         return barrios;
     }
-    public List<ObstaculoReporte> obtenerObstaculosPorBarrio(String nombreBarrio) {
-        List<ObstaculoReporte> obstaculos = new ArrayList<>();
+
+    public List<ItemReporte> obtenerObstaculosPorBarrio(String nombreBarrio) {
+        List<ItemReporte> obstaculos = new ArrayList<>();
         executor = Executors.newSingleThreadExecutor();
 
-        // Usar Future para manejar la consulta de manera asíncrona
-        Future<List<ObstaculoReporte>> result = executor.submit(() -> {
-            List<ObstaculoReporte> listaObstaculos = new ArrayList<>();
+        Future<List<ItemReporte>> result = executor.submit(() -> {
+            List<ItemReporte> listaObstaculos = new ArrayList<>();
             Connection con = null;
             try {
-                // Establecer la conexión con la base de datos
                 Class.forName(DataDB.driver);
                 con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
 
-                // Consulta para obtener los obstáculos por barrio
                 String query = "SELECT C.Descripcion AS Obstaculo, COUNT(O.ID_Obstaculo) AS Cantidad " +
                         "FROM Obstaculos O " +
                         "JOIN Puntos P ON O.ID_Punto = P.ID_Punto " +
                         "JOIN CatalogoObstaculos C ON O.ID_TipoObstaculo = C.ID_TipoObstaculo " +
                         "JOIN Barrios B ON P.ID_Barrio = B.ID_Barrio " +
-                        "WHERE B.Descripcion = ? " + // Utilizar el nombre del barrio
+                        "WHERE B.Descripcion = ? " +
                         "GROUP BY C.Descripcion";
 
                 PreparedStatement ps = con.prepareStatement(query);
-                ps.setString(1, nombreBarrio); // Establecer el nombre del barrio
+                ps.setString(1, nombreBarrio);
 
                 ResultSet rs = ps.executeQuery();
 
-                // Recuperar los resultados de la consulta y agregarlos a la lista
                 while (rs.next()) {
                     String descripcion = rs.getString("Obstaculo");
                     int cantidad = rs.getInt("Cantidad");
-                    listaObstaculos.add(new ObstaculoReporte(descripcion, cantidad)); // Agregar los objetos ObstaculoReporte
+                    listaObstaculos.add(new ItemReporte(descripcion, cantidad));
                 }
 
                 rs.close();
                 ps.close();
                 con.close();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -144,19 +142,117 @@ public class AccesoDatos {
             return listaObstaculos;
         });
 
-        // Esperar a que el hilo termine y obtener el resultado
         try {
-            obstaculos = result.get();  // Esto espera hasta que la consulta se complete
+            obstaculos = result.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         } finally {
-            executor.shutdown();  // Cerrar el executor después de obtener el resultado
+            executor.shutdown();
         }
 
         return obstaculos;
     }
 
+    public List<ItemReporte> obtenerObstaculosPorTipo(String tipo) {
+        List<ItemReporte> obstaculos = new ArrayList<>();
+        executor = Executors.newSingleThreadExecutor();
 
+        Future<List<ItemReporte>> result = executor.submit(() -> {
+            List<ItemReporte> listaObstaculos = new ArrayList<>();
+            Connection con = null;
+            try {
+                Class.forName(DataDB.driver);
+                con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+
+                String query = "SELECT B.Descripcion AS Barrio, COUNT(O.ID_Obstaculo) AS Cantidad " +
+                        "FROM Obstaculos O " +
+                        "JOIN Puntos P ON O.ID_Punto = P.ID_Punto " +
+                        "JOIN CatalogoObstaculos C ON O.ID_TipoObstaculo = C.ID_TipoObstaculo " +
+                        "JOIN Barrios B ON P.ID_Barrio = B.ID_Barrio " +
+                        "WHERE C.Descripcion = ? " +
+                        "GROUP BY B.Descripcion";
+
+                PreparedStatement ps = con.prepareStatement(query);
+                ps.setString(1, tipo);
+
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    String descripcion = rs.getString("Barrio");
+                    int cantidad = rs.getInt("Cantidad");
+                    listaObstaculos.add(new ItemReporte(descripcion, cantidad));
+                }
+
+                rs.close();
+                ps.close();
+                con.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return listaObstaculos;
+        });
+
+        try {
+            obstaculos = result.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            executor.shutdown();
+        }
+
+        return obstaculos;
+    }
+
+    public List<ItemReporte> obtenerObstaculosPorPeriodo(String fecha) {
+        List<ItemReporte> obstaculos = new ArrayList<>();
+        executor = Executors.newSingleThreadExecutor();
+
+        Future<List<ItemReporte>> result = executor.submit(() -> {
+            List<ItemReporte> listaObstaculos = new ArrayList<>();
+            Connection con = null;
+            try {
+                Class.forName(DataDB.driver);
+                con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+
+                String query = "SELECT O.Estado, COUNT(O.ID_Obstaculo) AS Cantidad " +
+                        "FROM Obstaculos O " +
+                        "WHERE O.FechaCreacion >= ? " +
+                        "GROUP BY O.Estado";
+
+                PreparedStatement ps = con.prepareStatement(query);
+                ps.setString(1, fecha);
+
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    String descripcion = rs.getString("Estado");
+                    int cantidad = rs.getInt("Cantidad");
+                    listaObstaculos.add(new ItemReporte(descripcion, cantidad));
+                }
+
+                rs.close();
+                ps.close();
+                con.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return listaObstaculos;
+        });
+
+        try {
+            obstaculos = result.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            executor.shutdown();
+        }
+
+        return obstaculos;
+    }
 
 
     public List<String> obtenerObstaculosActivos() {

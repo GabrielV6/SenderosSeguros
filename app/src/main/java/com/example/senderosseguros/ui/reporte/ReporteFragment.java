@@ -22,11 +22,14 @@ import androidx.fragment.app.Fragment;
 import com.example.senderosseguros.R;
 import com.example.senderosseguros.conexion.AccesoDatos;
 import com.example.senderosseguros.databinding.FragmentReporteBinding;
-import com.example.senderosseguros.entidad.ObstaculoReporte;
+import com.example.senderosseguros.entidad.ItemReporte;
 import com.github.mikephil.charting.charts.HorizontalBarChart; // Cambia a HorizontalBarChart
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 import android.os.Handler;
@@ -148,37 +151,61 @@ public class ReporteFragment extends Fragment {
     }
 
     private void mostrarGrafico() {
+        AccesoDatos accesoDatos = new AccesoDatos(requireContext());
 
-       AccesoDatos accesoDatos = new AccesoDatos(requireContext());
-        // Obtener el valor seleccionado en el Spinner
-        String selectedBarrio = binding.spinnerBarrio.getSelectedItem().toString();
-        if (selectedBarrio.isEmpty()) {
-            Toast.makeText(getContext(), "Por favor, selecciona un barrio válido.", Toast.LENGTH_SHORT).show();
-            return;  // Salir si no se seleccionó un barrio
+        int checkedId = binding.radioGroup.getCheckedRadioButtonId();
+        List<ItemReporte> datos = new ArrayList<>();
+
+        if (checkedId == R.id.rbBarrio) {
+            String selectedBarrio = binding.spinnerBarrio.getSelectedItem().toString();
+            if (selectedBarrio.isEmpty()) {
+                Toast.makeText(getContext(), "Por favor, selecciona un barrio válido.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            datos = accesoDatos.obtenerObstaculosPorBarrio(selectedBarrio);
+
+        } else if (checkedId == R.id.rbObstaculo) {
+            String selectedTipo = binding.spinnerObstaculo.getSelectedItem().toString();
+            if (selectedTipo.isEmpty()) {
+                Toast.makeText(getContext(), "Por favor, selecciona un tipo de obstaculo válido.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            datos = accesoDatos.obtenerObstaculosPorTipo(selectedTipo);
+
+        } else if (checkedId == R.id.rbTiempo) {
+            String selectedFecha = binding.spinnerTiempo.getSelectedItem().toString();
+            selectedFecha = "2023-06-01";
+            if (selectedFecha.isEmpty()) {
+                Toast.makeText(getContext(), "Por favor, selecciona un rango válido.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            datos = accesoDatos.obtenerObstaculosPorPeriodo(selectedFecha);
+
+        } else {
+            Toast.makeText(getContext(), "Por favor, selecciona una opción válida.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        // Llamar al metodo con el nombre del barrio
-        List<ObstaculoReporte> obstaculos= accesoDatos.obtenerObstaculosPorBarrio(selectedBarrio);
-        int checkedId = getCheckedRadioButtonId();
+        // Set the report type description based on the selected option
         String texto = llenarTipoReporte(checkedId);
         binding.textUltimosTresMeses.setText(texto);
         ocultarElementos();
+
         List<BarEntry> entries = new ArrayList<>();
         int index = 0;
-        // Llenar los datos del gráfico con la lista de obstáculos
-        for (ObstaculoReporte obstaculo : obstaculos) {
+
+        // Fill the bar chart data with the obstacles list
+        for (ItemReporte obstaculo : datos) {
             entries.add(new BarEntry(index++, obstaculo.getCantidad()));
         }
 
-        // Crear y configurar el conjunto de datos para el gráfico de barras
         BarDataSet dataSet = new BarDataSet(entries, "Obstáculos");
-        dataSet.setColor(Color.BLUE); // Establecer el color de las barras
-        dataSet.setValueTextColor(Color.BLACK); // Establecer el color del texto en las barras
+        dataSet.setColor(Color.BLUE);
+        dataSet.setValueTextColor(Color.BLACK);
 
-        // Crear el objeto BarData y establecerlo en el gráfico
         BarData barData = new BarData(dataSet);
-        barChart.setData(barData);
-        barChart.invalidate(); // Actualizar el gráfico para mostrar los nuevos datos
+        binding.barChart.setData(barData);
+        binding.barChart.invalidate(); // Refresh the chart to display new data
     }
 
     private void ocultarElementos() {
@@ -263,6 +290,7 @@ public class ReporteFragment extends Fragment {
 
         return texto;
     }
+
     private int getCheckedRadioButtonId() {
         RadioGroup radioGroup = binding.radioGroup;
         return radioGroup.getCheckedRadioButtonId();
