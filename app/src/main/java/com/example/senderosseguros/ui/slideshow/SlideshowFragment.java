@@ -40,6 +40,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.maps.android.PolyUtil;
 
 import org.json.JSONArray;
@@ -59,7 +60,8 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
     private LatLng punto1, punto2; // Variables para guardar las coordenadas de dos puntos
     private boolean isFirstPoint = false; // Variable para alternar entre el primer y segundo punto
     private LatLng puntoSeleccionado; // Variable para guardar las coordenadas
-
+    private FloatingActionButton likeButton;
+    private FloatingActionButton trashButton;
     // Register the permissions launcher
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
@@ -82,16 +84,26 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         binding = FragmentSlideshowBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        trashButton = binding.trash;
+        likeButton = binding.like;
+        trashButton.setVisibility(View.INVISIBLE);
+        likeButton.setVisibility(View.INVISIBLE);
+        likeButton.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Botón de 'like' clickeado", Toast.LENGTH_SHORT).show();
+            likeButton.setVisibility(View.INVISIBLE); // Oculta el botón después de hacer clic
+        });
+        trashButton.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Botón de 'trash' clickeado", Toast.LENGTH_SHORT).show();
+            trashButton.setVisibility(View.INVISIBLE); // Oculta el botón después de hacer clic
+        });
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
         requestQueue = Volley.newRequestQueue(requireActivity());
-        //Botón para reportar obstáculos
-        //Botón para reportar obstáculos
-        //Botón para reportar obstáculos
-        // Botón para reportar obstáculos
+
 
         // Configura los OnClickListeners para las opciones
         setUpOptionButtons();
@@ -157,8 +169,23 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
 
         obstaculosMarcados();
 
+        mMap.setOnMarkerClickListener(marker -> {
+            //si marcador clickeado es Punto 2 o mi ubicacion entonces no mostrar
+            String markerTitle = marker.getTitle();
+            Toast.makeText(getContext(), "Marcador clickeado: " + markerTitle, Toast.LENGTH_SHORT).show();
+
+            // Muestra el botón "like" y el tachito cuando obstaculo es clickeado
+            likeButton.setVisibility(View.VISIBLE);
+            trashButton.setVisibility(View.VISIBLE);
+
+
+            return false;
+        });
+
         // Habilita el listener para capturar clics en el mapa
         mMap.setOnMapClickListener(latLng -> {
+            likeButton.setVisibility(View.INVISIBLE);
+            trashButton.setVisibility(View.INVISIBLE);
             if (punto1!=null && punto2!=null) {
                 mMap.clear();
                 getCurrentLocation();
@@ -216,8 +243,6 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             LatLng position = new LatLng(obstaculo.getLatitud(), obstaculo.getLongitud());
             String title = "Tipo: " + obstaculo.getDescripcionObstaculo();
 
-            //int resourse= 0;
-            float markerColor;
             switch (obstaculo.getIdTipoObstaculo()) {
                 case 1:
                     mMap.addMarker(new MarkerOptions()
