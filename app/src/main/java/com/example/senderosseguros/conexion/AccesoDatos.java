@@ -538,4 +538,39 @@ public class AccesoDatos {
         return exito.get();
     }
 
+    //Metodo para traer IDUser de BD y mostrar en Home
+    public int recuperarIDUser(String user) {
+        int IDUser = -1;
+
+        executor = Executors.newSingleThreadExecutor();
+        Future<Integer> result = executor.submit(() -> {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                try (Connection con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                     PreparedStatement ps = con.prepareStatement("SELECT ID_Usuario FROM Usuarios WHERE Usuario = ?")) {
+
+                    ps.setString(1, user);
+                    ResultSet rs = ps.executeQuery();
+
+                    if (rs.next()) {
+                        return rs.getInt("ID_Usuario");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return -1; // Devuelve -1 si no se encuentra el usuario
+        });
+
+        try {
+            IDUser = result.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            executor.shutdown();
+        }
+
+        return IDUser;
+    }
+
 }

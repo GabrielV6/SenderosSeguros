@@ -91,6 +91,7 @@ public class LoginFragment extends Fragment {
         boolean existe = accesoDatos.existeUserPass(user, pass);
         //boolean existe = true;
         String correo = accesoDatos.recuperarCorreo(user);
+        int ID_User = accesoDatos.recuperarIDUser(user);
 
         if (existe) {
             dbHelper.resetearIntentosFallidos(user);
@@ -104,6 +105,7 @@ public class LoginFragment extends Fragment {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.putExtra("user", user);
             intent.putExtra("correo", correo);
+            intent.putExtra("ID_User", ID_User);
 
             // Iniciar MainActivity
             startActivity(intent);
