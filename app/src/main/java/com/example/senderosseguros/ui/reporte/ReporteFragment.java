@@ -66,7 +66,7 @@ public class ReporteFragment extends Fragment {
         rb_Obstaculo = root.findViewById(R.id.rbObstaculo);
         rb_Periodo = root.findViewById(R.id.rbTiempo);
 
-        textUltimosTresMeses = root.findViewById(R.id.textUltimosTresMeses);
+        textUltimosTresMeses = root.findViewById(R.id.subtitle_descripcion);
         deshabilitarTodosLosSpinners();
 
         // Obtener el RadioGroup
@@ -297,7 +297,7 @@ public class ReporteFragment extends Fragment {
         String texto = "";
 
         if (rbSeleccionado == R.id.rbBarrio) {
-            texto = getString(R.string.sp_barrio);
+            texto = binding.spinnerBarrio.getSelectedItem().toString();
         } else if (rbSeleccionado == R.id.rbObstaculo) {
             texto = binding.spinnerObstaculo.getSelectedItem().toString();
         } else if (rbSeleccionado == R.id.rbTiempo) {
