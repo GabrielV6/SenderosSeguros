@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.example.senderosseguros.R;
 import com.example.senderosseguros.conexion.AccesoDatos;
 import com.example.senderosseguros.databinding.FragmentReporteBinding;
+import com.example.senderosseguros.entidad.Barrio;
 import com.example.senderosseguros.entidad.ItemReporte;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -26,7 +28,11 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import android.os.Handler;
 import android.os.Looper;
@@ -100,18 +106,24 @@ public class ReporteFragment extends Fragment {
         String seleccionarTipo = getString(R.string.sp_tipo);
         String seleccionarPeriodo = getString(R.string.sp_periodo);
 
-        // Spinner para "Barrio" ACA LO COMENTE PORQUE CAMBIE EL METODO DEL LLENADO AHORA TRAE EL ID )SE DEBE AJUSTAR)
-    /*    new Thread(() -> {
-            List<String> barrios = accesoDatos.obtenerBarrios();
-            barrios.add(0, seleccionarBarrio);
+        // Spinner para "Barrio"
+        new Thread(() -> {
+            List<Barrio> barrios = accesoDatos.obtenerBarrios();
+
+            List<String> nombresBarrios = new ArrayList<>();
+            nombresBarrios.add(seleccionarBarrio);
+
+            for (Barrio barrio : barrios) {
+                nombresBarrios.add(barrio.getDescripcion());
+            }
 
             new Handler(Looper.getMainLooper()).post(() -> {
                 ArrayAdapter<String> barrioAdapter = new ArrayAdapter<>(getContext(),
-                        android.R.layout.simple_spinner_item, barrios);
+                        android.R.layout.simple_spinner_item, nombresBarrios);
                 barrioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 binding.spinnerBarrio.setAdapter(barrioAdapter);
             });
-        }).start();*/
+        }).start();
 
         // Spinner para "Tipo de Obstáculo"
         new Thread(() -> {
@@ -126,22 +138,10 @@ public class ReporteFragment extends Fragment {
             });
         }).start();
 
-        // Spinner para "Periodos"
-//        new Thread(() -> {
-//            List<String> periodos = accesoDatos.obtenerPeriodos();
-//            periodos.add(0, seleccionarPeriodo);
-//
-//            new Handler(Looper.getMainLooper()).post(() -> {
-//                ArrayAdapter<String> periodoAdapter = new ArrayAdapter<>(getContext(),
-//                        android.R.layout.simple_spinner_item, periodos);
-//                periodoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                binding.spinnerTiempo.setAdapter(periodoAdapter);
-//            });
-//        }).start();
-
-        // Spinner para "Periodo"
-        ArrayAdapter<CharSequence> periodoAdapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.periodo_options, android.R.layout.simple_spinner_item);
+        // Spinner para "Periodo" con las tres opciones
+        List<String> opcionesPeriodo = Arrays.asList("Seleccione un periodo","Última semana", "Último mes", "Últimos tres meses");
+        ArrayAdapter<String> periodoAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, opcionesPeriodo);
         periodoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerTiempo.setAdapter(periodoAdapter);
     }
@@ -169,13 +169,33 @@ public class ReporteFragment extends Fragment {
             datos = accesoDatos.obtenerObstaculosPorTipo(selectedTipo);
 
         } else if (checkedId == R.id.rbTiempo) {
-            String selectedFecha = binding.spinnerTiempo.getSelectedItem().toString();
-            selectedFecha = "2023-06-01";
-            if (selectedFecha.isEmpty()) {
+            String selectedPeriodo = binding.spinnerTiempo.getSelectedItem().toString();
+            if (selectedPeriodo == "Seleccione un periodo" ) {
                 Toast.makeText(getContext(), "Por favor, selecciona un rango válido.", Toast.LENGTH_SHORT).show();
                 return;
             }
-            datos = accesoDatos.obtenerObstaculosPorPeriodo(selectedFecha);
+
+            Calendar calendar = Calendar.getInstance();
+            Date fechaInicio = new Date();
+
+            switch (selectedPeriodo) {
+                case "Última semana":
+                    calendar.add(Calendar.WEEK_OF_YEAR, -1);
+                    fechaInicio = calendar.getTime();
+                    break;
+                case "Último mes":
+                    calendar.add(Calendar.MONTH, -1);
+                    fechaInicio = calendar.getTime();
+                    break;
+                case "Últimos tres meses":
+                    calendar.add(Calendar.MONTH, -3);
+                    fechaInicio = calendar.getTime();
+                    break;
+            }
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String fechaInicioStr = dateFormat.format(fechaInicio);
+            datos = accesoDatos.obtenerObstaculosPorPeriodo(fechaInicioStr);
 
         } else {
             Toast.makeText(getContext(), "Por favor, selecciona una opción válida.", Toast.LENGTH_SHORT).show();
