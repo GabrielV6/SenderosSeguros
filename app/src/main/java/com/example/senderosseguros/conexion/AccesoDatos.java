@@ -1,6 +1,8 @@
 package com.example.senderosseguros.conexion;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.example.senderosseguros.entidad.Barrio;
 import com.example.senderosseguros.entidad.ItemReporte;
@@ -718,6 +720,51 @@ public class AccesoDatos {
 
         return tipoObstaculo.get();
     }
+
+    ///
+    public void obtenerID_Punto(String latitud, String longitud, OnIDPuntoListener listener) {
+        executor = Executors.newSingleThreadExecutor();
+
+        executor.execute(() -> {
+            Connection con = null;
+            int idPunto = -1; // Valor por defecto si no se encuentra el ID_Punto
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+
+                String query = "SELECT ID_Punto FROM Puntos WHERE Latitud = ? AND Longitud = ?";
+                PreparedStatement ps = con.prepareStatement(query);
+                ps.setString(1, latitud);
+                ps.setString(2, longitud);
+
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    idPunto = rs.getInt("ID_Punto");
+                }
+
+                rs.close();
+                ps.close();
+                con.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Llama al listener para pasar el resultado al hilo principal
+            final int finalIdPunto = idPunto;
+            new Handler(Looper.getMainLooper()).post(() -> {
+                listener.onIDPuntoObtenido(finalIdPunto);
+            });
+        });
+    }
+
+    public interface OnIDPuntoListener {
+        void onIDPuntoObtenido(int idPunto);
+    }
+
+
 
 
 }

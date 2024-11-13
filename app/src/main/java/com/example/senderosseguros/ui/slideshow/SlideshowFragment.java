@@ -59,10 +59,11 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
     private RequestQueue requestQueue;
     private LatLng punto1, punto2; // Variables para guardar las coordenadas de dos puntos
     private boolean isFirstPoint = false; // Variable para alternar entre el primer y segundo punto
-    private LatLng puntoSeleccionado; // Variable para guardar las coordenadas
+
     private FloatingActionButton likeButton;
     private FloatingActionButton trashButton;
-    // Register the permissions launcher
+
+
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
                 Boolean fineLocationGranted = result.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);
@@ -170,9 +171,16 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         obstaculosMarcados();
 
         mMap.setOnMarkerClickListener(marker -> {
-            //si marcador clickeado es Punto 2 o mi ubicacion entonces no mostrar
+            AccesoDatos accesoDatos = new AccesoDatos(requireContext());
             String markerTitle = marker.getTitle();
-            Toast.makeText(getContext(), "Marcador clickeado: " + markerTitle, Toast.LENGTH_SHORT).show();
+            String latitudObstaculo = String.valueOf(marker.getPosition().latitude);
+            String longitudObstaculo = String.valueOf(marker.getPosition().longitude);
+
+            /// Con las coordenadas buscamos el ID_Punto
+            accesoDatos.obtenerID_Punto(latitudObstaculo, longitudObstaculo, idPunto -> {
+                Toast.makeText(requireContext(), "ID Punto obtenido: " + idPunto, Toast.LENGTH_SHORT).show();
+            });
+            Toast.makeText(getContext(), "Obstaculo " + markerTitle, Toast.LENGTH_SHORT).show();
 
             // Muestra el botón "like" y el tachito cuando obstaculo es clickeado
             likeButton.setVisibility(View.VISIBLE);
