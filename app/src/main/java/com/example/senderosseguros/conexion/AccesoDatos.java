@@ -18,12 +18,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -598,10 +600,150 @@ public class AccesoDatos {
 
         return idPunto[0];
     }
+    public Punto obtenerPuntoPorId(int idPunto) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    public boolean insertarObstaculo(int idTipoObstaculo, String comentarios, String imagen, int idUsuario, int idPunto, String fechaBaja, int contadorSolucion, int estado) {
+        Future<Punto> futurePunto = executorService.submit(() -> {
+            Punto punto = null;
+
+            try {
+                Class.forName(DataDB.driver);
+                String query = "SELECT ID_Punto, Latitud, Longitud, Altitud, ID_Barrio FROM Puntos WHERE ID_Punto = ?";
+
+                try (Connection conn = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                     PreparedStatement ps = conn.prepareStatement(query)) {
+
+                    ps.setInt(1, idPunto);
+
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+
+                            double latitud = rs.getDouble("Latitud");
+                            double longitud = rs.getDouble("Longitud");
+                            int idBarrio = rs.getInt("ID_Barrio");
+
+                            Barrio barrio = obtenerBarrioPorId(idBarrio); // Asumimos que este método devuelve un Barrio
+                            punto = new Punto(idPunto, latitud, longitud, barrio);
+                        }
+                    }
+                }
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
+
+            return punto;
+        });
+
+        try {
+            return futurePunto.get(5, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            executorService.shutdown();
+        }
+    }
+
+    public Barrio obtenerBarrioPorId(int idBarrio) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+        Future<Barrio> futureBarrio = executorService.submit(() -> {
+            Barrio barrio = null;
+
+            try {
+                Class.forName(DataDB.driver);
+                String query = "SELECT ID_Barrio, Descripcion FROM Barrios WHERE ID_Barrio = ?";
+
+                try (Connection conn = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                     PreparedStatement ps = conn.prepareStatement(query)) {
+
+                    ps.setInt(1, idBarrio); // Establecemos el ID_Barrio a buscar
+
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            String nombre = rs.getString("Descripcion");
+                            barrio = new Barrio(idBarrio, nombre);
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            return barrio;
+        });
+
+        try {
+            return futureBarrio.get(5, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            executorService.shutdown();
+        }
+    }
+    public Usuario obtenerUsuarioPorId(int idUsuario) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+        Future<Usuario> futureUsuario = executorService.submit(() -> {
+            Usuario usuario = null; // Variable local para almacenar el Usuario
+
+            try {
+                Class.forName(DataDB.driver);
+                String query = "SELECT " +
+                        "ID_Usuario, Nombre, Apellido, DNI, CorreoElectronico AS Correo, " +
+                        "Usuario AS User, Contrasena AS Pass, FechaRegistro, Puntaje, Estado " +
+                        "FROM Usuarios " +
+                        "WHERE ID_Usuario = ?";
+
+                try (Connection conn = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                     PreparedStatement ps = conn.prepareStatement(query)) {
+
+                    ps.setInt(1, idUsuario); // Establecemos el ID_Usuario a buscar
+
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            String nombre = rs.getString("Nombre");
+                            String apellido = rs.getString("Apellido");
+                            String dni = rs.getString("DNI");
+                            String correo = rs.getString("Correo");
+                            String user = rs.getString("User");
+                            String pass = rs.getString("Pass");
+                            Date fechaRegistro = rs.getDate("FechaRegistro");
+                            int puntaje = rs.getInt("Puntaje");
+                            boolean estado = rs.getBoolean("Estado");
+
+                            usuario = new Usuario(idUsuario, nombre, apellido, dni, user, pass, correo, fechaRegistro, puntaje, estado);
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            return usuario;
+        });
+
+        try {
+            return futureUsuario.get(5, TimeUnit.SECONDS); // Espera hasta 5 segundos
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            executorService.shutdown();
+        }
+    }
+    public boolean insertarObstaculo(Obstaculo obstaculo) {
         AtomicBoolean exito = new AtomicBoolean(false);
-
+        int estado = 1;
         executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             Connection con = null;
@@ -613,13 +755,18 @@ public class AccesoDatos {
                         "VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?)";
 
                 try (PreparedStatement ps = con.prepareStatement(query)) {
-                    ps.setInt(1, idTipoObstaculo);
-                    ps.setString(2, comentarios);
-                    ps.setString(3, imagen);
-                    ps.setInt(4, idUsuario);
-                    ps.setInt(5, idPunto);
-                    ps.setString(6, fechaBaja);
-                    ps.setInt(7, contadorSolucion);
+                    ps.setInt(1, obstaculo.getTipoObstaculo().getIdTipo());
+                    ps.setString(2, obstaculo.getComentarios());
+                    ps.setString(3, obstaculo.getImagen());
+                    ps.setInt(4, obstaculo.getUsuario().getID_Usuario());
+                    ps.setInt(5, obstaculo.getPunto().getIdPunto());
+                    if (obstaculo.getFechaBaja() != null) {
+                        ps.setDate(6, new java.sql.Date(obstaculo.getFechaBaja().getTime()));
+                    } else {
+                        ps.setNull(6, java.sql.Types.DATE); // Si es nula, dejamos el campo como NULL
+                    }
+                    ps.setInt(7, obstaculo.getContadorSolucion());
+
                     ps.setInt(8, estado);
 
                     int rowsAffected = ps.executeUpdate();

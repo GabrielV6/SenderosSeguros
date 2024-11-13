@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
 
+import com.example.senderosseguros.entidad.SessionManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -71,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         String user = intent.getStringExtra("user");
         String correo = intent.getStringExtra("correo");
         int ID_User = intent.getIntExtra("ID_User", -1); // Si "ID_User" existe, obtendrás su valor; si no, -1.
+//grabo el usuario en la session para usarlo en otro fragment...
+        SessionManager.getInstance().setID_User(ID_User);
 
 
         // Actualizar los TextViews en el header del Navigation Drawer

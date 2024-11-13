@@ -17,8 +17,11 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.senderosseguros.entidad.Barrio;
+import com.example.senderosseguros.entidad.Obstaculo;
 import com.example.senderosseguros.entidad.Punto;
+import com.example.senderosseguros.entidad.SessionManager;
 import com.example.senderosseguros.entidad.TipoObstaculo;
+import com.example.senderosseguros.entidad.Usuario;
 import com.google.android.gms.maps.model.LatLng;
 
 import com.example.senderosseguros.R;
@@ -106,36 +109,43 @@ public class ReportarFragment extends Fragment {
         }).start();
 
 
-
         binding.reportButton.setOnClickListener(v -> {
             if (punto1 != null && selectedOption != null && barrioSeleccionado != null) {
 
                 Punto punto = new Punto();
+                Barrio barrio = new Barrio();
+                Usuario usuario = new Usuario();
+
                 punto.setBarrio(barrioSeleccionado);
                 punto.setLatitud(punto1.latitude);
                 punto.setLongitud(punto1.longitude);
-
                 int idPunto = accesoDatos.insertarPunto(punto);
 
-                int idUsuario = 5; // Este debe ser el ID del usuario autenticado
+                punto = accesoDatos.obtenerPuntoPorId(idPunto);
+                barrio= accesoDatos.obtenerBarrioPorId(punto.getBarrio().getIdBarrio());
+
+                int idUsuario = SessionManager.getInstance().getID_User();
+                usuario = accesoDatos.obtenerUsuarioPorId(idUsuario);
+//ESTOS DATOS LOS PUSE POR DEFECTO, hay que acomodarlos
                 String comentarios = "Descripción del obstáculo"; //recuperar el texto del fragment de estef
                 String imagen = null;
-                String fechaCreacionStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-                String fechaBaja = null;
+                Date fechaBaja = null;
                 int contadorSolucion = 0;
-                int estado = 1;
-
+                boolean estado = true;
+//*********************************************************
                 if (idPunto != -1) {  // Si la inserción fue exitosa (idPunto es diferente de -1)
-                    boolean exito = accesoDatos.insertarObstaculo(
-                            tipoObstaculo.getIdTipo(),
+                    Obstaculo obstaculo = new Obstaculo(
+                            tipoObstaculo, //objeto
                             comentarios,
                             imagen,
-                            idUsuario,
-                            idPunto,
+                            punto, //objeto
+                            usuario, //objeto
                             fechaBaja,
                             contadorSolucion,
                             estado
                     );
+
+                    boolean exito = accesoDatos.insertarObstaculo(obstaculo);
 
                     if (exito) {
                         Toast.makeText(getContext(), "Obstáculo reportado correctamente.", Toast.LENGTH_SHORT).show();

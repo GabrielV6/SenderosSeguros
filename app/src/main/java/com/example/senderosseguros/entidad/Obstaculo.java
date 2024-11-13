@@ -32,6 +32,17 @@ public class Obstaculo {
         this.estado = estado;
     }
 
+    public Obstaculo(TipoObstaculo tipoObstaculo, String comentarios, String imagen, Punto punto, Usuario usuario, Date fechaBaja, int contadorSolucion, boolean estado) {
+        this.tipoObstaculo = tipoObstaculo;
+        this.comentarios = comentarios;
+        this.imagen = imagen;
+        this.punto = punto;
+        this.usuario = usuario;
+        this.fechaBaja = fechaBaja;
+        this.contadorSolucion = contadorSolucion;
+        this.estado = estado;
+    }
+
     public int getIdObstaculo() {
         return idObstaculo;
     }
