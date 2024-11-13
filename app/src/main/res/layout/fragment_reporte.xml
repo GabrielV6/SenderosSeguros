@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="Informe de Obstaculos"
         android:textAlignment="center"
@@ -59,12 +59,12 @@
         app:layout_constraintTop_toBottomOf="@id/text_reporte">
 
         <RadioButton
-                android:id="@+id/rbBarrio"
-                android:layout_width="334dp"
-                android:layout_height="wrap_content"
-                android:text="@string/rbBarrio"
-                android:textColor="#121212"
-                android:textSize="16sp" />
+            android:id="@+id/rbBarrio"
+            android:layout_width="334dp"
+            android:layout_height="wrap_content"
+            android:text="@string/rbBarrio"
+            android:textColor="#121212"
+            android:textSize="16sp" />
 
         <Spinner
             android:id="@+id/spinnerBarrio"
@@ -114,8 +114,8 @@
 
     <Button
         android:id="@+id/buttonGenerar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="324dp"
+        android:layout_height="49dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="#FF3B30"
@@ -130,7 +130,7 @@
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pieChart"
         android:layout_width="0dp"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"

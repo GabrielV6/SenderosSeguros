@@ -192,12 +192,13 @@ public class ReporteFragment extends Fragment {
             entries.add(new PieEntry(item.getCantidad(), item.getDescripcion()));
         }
 
-        PieDataSet dataSet = new PieDataSet(entries, "Obstáculos");
+        PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         dataSet.setValueTextColor(Color.BLACK);
         dataSet.setValueTextSize(12f);
 
         PieData pieData = new PieData(dataSet);
+        pieChart.getDescription().setEnabled(false); // Disables the description label entirely
         pieChart.setData(pieData);
         pieChart.setUsePercentValues(true);
         pieChart.invalidate();
