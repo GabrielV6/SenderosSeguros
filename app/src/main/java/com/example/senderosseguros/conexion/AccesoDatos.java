@@ -908,7 +908,7 @@ public class AccesoDatos {
         });
     }
 
-    public boolean obtenerCantObstaculos(int idUsuLog, int idPunto) {
+    public boolean chequearCalificado(int idUsuLog, int id_obstaculo) {
 
         executor = Executors.newSingleThreadExecutor();
         final boolean[] existe = {false};
@@ -920,7 +920,7 @@ public class AccesoDatos {
                 con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
                 String query = "SELECT COUNT(*) AS cantPuntuada FROM PuntuacionUsuarios WHERE ID_Obstaculo = ? AND ID_Usuario_que_puntua = ?";
                 PreparedStatement ps = con.prepareStatement(query);
-                ps.setInt(1, idPunto);
+                ps.setInt(1, id_obstaculo);
                 ps.setInt(2, idUsuLog);
 
                 ResultSet rs = ps.executeQuery();

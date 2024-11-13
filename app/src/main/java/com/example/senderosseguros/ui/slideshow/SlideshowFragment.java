@@ -186,7 +186,8 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
 
                 // Ahora puedes usar el idPunto para obtener el obstáculo
                 Obstaculo obstaculo = accesoDatos.obtenerObstaculo(idPunto);
-                boolean estaPuntuado = accesoDatos.obtenerCantObstaculos(id_user_login, idPunto);
+                int id_obstaculo = obstaculo.getIdObstaculo();
+                boolean estaPuntuado = accesoDatos.chequearCalificado(id_user_login, id_obstaculo);
                 // Si necesitas hacer algo más con el idPunto o el obstáculo, lo puedes hacer aquí
                 if (!estaPuntuado)
                     likeButton.setVisibility(View.VISIBLE);
