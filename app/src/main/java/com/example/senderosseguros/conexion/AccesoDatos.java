@@ -908,6 +908,47 @@ public class AccesoDatos {
         });
     }
 
+    public boolean obtenerCantObstaculos(int idUsuLog, int idPunto) {
+
+        executor = Executors.newSingleThreadExecutor();
+        final boolean[] existe = {false};
+
+        executor.execute(() -> {
+            Connection con = null;
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                String query = "SELECT COUNT(*) AS cantPuntuada FROM PuntuacionUsuarios WHERE ID_Obstaculo = ? AND ID_Usuario_que_puntua = ?";
+                PreparedStatement ps = con.prepareStatement(query);
+                ps.setInt(1, idPunto);
+                ps.setInt(2, idUsuLog);
+
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    int count = rs.getInt("cantPuntuada");
+                    existe[0] = count > 0;
+                }
+
+                rs.close();
+                ps.close();
+                con.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        try {
+            // Espera que el hilo termine
+            executor.shutdown();
+            executor.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return existe[0];
+    }
+
     public interface OnIDPuntoListener {
         void onIDPuntoObtenido(int idPunto);
     }

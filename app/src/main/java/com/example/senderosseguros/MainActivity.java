@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         SessionManager.getInstance().setID_User(ID_User);
 
 
+
         // Actualizar los TextViews en el header del Navigation Drawer
         if (user != null && correo != null) {
             // Obtén la cabecera del NavigationView

@@ -29,6 +29,7 @@ import com.example.senderosseguros.conexion.AccesoDatos;
 import com.example.senderosseguros.databinding.FragmentSlideshowBinding;
 import com.example.senderosseguros.entidad.Obstaculo;
 import com.example.senderosseguros.entidad.ObstaculoMarcadores;
+import com.example.senderosseguros.entidad.SessionManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -178,21 +179,25 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             String markerTitle = marker.getTitle();
             String latitudObstaculo = String.valueOf(marker.getPosition().latitude);
             String longitudObstaculo = String.valueOf(marker.getPosition().longitude);
-
+            int id_user_login = SessionManager.getInstance().getID_User();
             accesoDatos.obtenerID_Punto(latitudObstaculo, longitudObstaculo, idPunto -> {
                 // Aquí ya tienes el idPunto después de que se obtenga
                 Toast.makeText(requireContext(), "ID Punto obtenido: " + idPunto, Toast.LENGTH_SHORT).show();
 
                 // Ahora puedes usar el idPunto para obtener el obstáculo
                 Obstaculo obstaculo = accesoDatos.obtenerObstaculo(idPunto);
-
+                boolean estaPuntuado = accesoDatos.obtenerCantObstaculos(id_user_login, idPunto);
                 // Si necesitas hacer algo más con el idPunto o el obstáculo, lo puedes hacer aquí
+                if (!estaPuntuado)
+                    likeButton.setVisibility(View.VISIBLE);
+                else
+                    trashButton.setVisibility(View.INVISIBLE);
             });
 
             // Este Toast se ejecuta de inmediato y no tiene acceso a idPunto, porque el código que obtiene el idPunto es asincrónico.
             Toast.makeText(getContext(), "Obstáculo " + markerTitle, Toast.LENGTH_SHORT).show();
 
-            likeButton.setVisibility(View.VISIBLE);
+
             trashButton.setVisibility(View.VISIBLE);
 
 
