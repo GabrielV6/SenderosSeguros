@@ -2,8 +2,8 @@ package com.example.senderosseguros.entidad;
 
 public class Barrio {
 
-    int idBarrio;
-    String descripcion;
+    private int idBarrio;
+    private String descripcion;
 
     public Barrio () {
 

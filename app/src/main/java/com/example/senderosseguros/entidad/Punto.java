@@ -2,10 +2,10 @@ package com.example.senderosseguros.entidad;
 
 public class Punto {
 
-    int idPunto;
-    double latitud;
-    double longitud;
-    Barrio barrio;
+    private int idPunto;
+    private double latitud;
+    private double longitud;
+    private Barrio barrio;
 
     public Punto () {
 

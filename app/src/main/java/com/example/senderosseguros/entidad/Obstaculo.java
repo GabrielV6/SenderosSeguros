@@ -4,16 +4,16 @@ import java.util.Date;
 
 public class Obstaculo {
 
-    int idObstaculo;
-    TipoObstaculo tipoObstaculo;
-    String comentarios;
-    String imagen;
-    Punto punto;
-    Usuario usuario;
-    Date fechaCreacion;
-    Date fechaBaja;
-    int contadorSolucion;
-    boolean estado;
+    private int idObstaculo;
+    private TipoObstaculo tipoObstaculo;
+    private String comentarios;
+    private String imagen;
+    private Punto punto;
+    private Usuario usuario;
+    private Date fechaCreacion;
+    private Date fechaBaja;
+    private int contadorSolucion;
+    private boolean estado;
 
     public Obstaculo () {
 

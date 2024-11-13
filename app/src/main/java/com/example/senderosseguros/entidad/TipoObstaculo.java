@@ -2,8 +2,8 @@ package com.example.senderosseguros.entidad;
 
 public class TipoObstaculo {
 
-    int idTipo;
-    String descripcion;
+    private int idTipo;
+    private String descripcion;
 
     public TipoObstaculo () {
 
