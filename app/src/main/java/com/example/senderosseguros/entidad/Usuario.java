@@ -117,6 +117,10 @@ public class Usuario {
         Correo = correo;
     }
 
+    public void setID_Usuario(int ID_Usuario) {
+        this.ID_Usuario = ID_Usuario;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" +

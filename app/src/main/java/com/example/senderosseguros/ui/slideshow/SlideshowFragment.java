@@ -3,6 +3,7 @@ package com.example.senderosseguros.ui.slideshow;
 import com.example.senderosseguros.R;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.senderosseguros.conexion.AccesoDatos;
 import com.example.senderosseguros.databinding.FragmentSlideshowBinding;
+import com.example.senderosseguros.entidad.Obstaculo;
 import com.example.senderosseguros.entidad.ObstaculoMarcadores;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -157,6 +159,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         binding = null;
     }
 
+    @SuppressLint("PotentialBehaviorOverride")
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
@@ -176,13 +179,19 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             String latitudObstaculo = String.valueOf(marker.getPosition().latitude);
             String longitudObstaculo = String.valueOf(marker.getPosition().longitude);
 
-            /// Con las coordenadas buscamos el ID_Punto
             accesoDatos.obtenerID_Punto(latitudObstaculo, longitudObstaculo, idPunto -> {
+                // Aquí ya tienes el idPunto después de que se obtenga
                 Toast.makeText(requireContext(), "ID Punto obtenido: " + idPunto, Toast.LENGTH_SHORT).show();
-            });
-            Toast.makeText(getContext(), "Obstaculo " + markerTitle, Toast.LENGTH_SHORT).show();
 
-            // Muestra el botón "like" y el tachito cuando obstaculo es clickeado
+                // Ahora puedes usar el idPunto para obtener el obstáculo
+                Obstaculo obstaculo = accesoDatos.obtenerObstaculo(idPunto);
+
+                // Si necesitas hacer algo más con el idPunto o el obstáculo, lo puedes hacer aquí
+            });
+
+            // Este Toast se ejecuta de inmediato y no tiene acceso a idPunto, porque el código que obtiene el idPunto es asincrónico.
+            Toast.makeText(getContext(), "Obstáculo " + markerTitle, Toast.LENGTH_SHORT).show();
+
             likeButton.setVisibility(View.VISIBLE);
             trashButton.setVisibility(View.VISIBLE);
 

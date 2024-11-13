@@ -45,6 +45,10 @@ public class Punto {
         this.barrio = barrio;
     }
 
+    public void setIdPunto(int idPunto) {
+        this.idPunto = idPunto;
+    }
+
     @Override
     public String toString() {
         return "Punto{" +

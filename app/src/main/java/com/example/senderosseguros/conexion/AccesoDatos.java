@@ -6,6 +6,7 @@ import android.os.Looper;
 
 import com.example.senderosseguros.entidad.Barrio;
 import com.example.senderosseguros.entidad.ItemReporte;
+import com.example.senderosseguros.entidad.Obstaculo;
 import com.example.senderosseguros.entidad.ObstaculoMarcadores;
 import com.example.senderosseguros.entidad.Punto;
 import com.example.senderosseguros.entidad.TipoObstaculo;
@@ -764,6 +765,80 @@ public class AccesoDatos {
         void onIDPuntoObtenido(int idPunto);
     }
 
+    public Obstaculo obtenerObstaculo(int ID_Punto) {
+       Obstaculo obstaculoobj= null;
+        String query = "SELECT * FROM Obstaculos WHERE ID_Punto = ? AND Estado = 1";
+
+        // Ejecuta la consulta en un nuevo hilo
+        executor = Executors.newSingleThreadExecutor();
+        Future<Obstaculo> result = executor.submit(() -> {
+            Obstaculo obstaculo = new Obstaculo();
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                try (Connection con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                     PreparedStatement ps = con.prepareStatement(query)) {
+
+                    // Establece el parÃ¡metro de la consulta
+                    ps.setInt(1, ID_Punto);
+
+                    // Ejecuta la consulta y procesa el resultado
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+
+
+                        obstaculo.setIdObstaculo(rs.getInt("ID_Obstaculo"));
+                        obstaculo.setComentarios(rs.getString("Comentarios"));
+                        obstaculo.setImagen(rs.getString("Imagen"));
+                        obstaculo.setFechaCreacion(rs.getDate("FechaCreacion"));
+                        obstaculo.setFechaBaja(rs.getDate("FechaBaja"));
+                        obstaculo.setContadorSolucion(rs.getInt("ContadorSolucion"));
+                        obstaculo.setEstado(rs.getBoolean("Estado"));
+
+                        // Instancia TipoObstaculo y Punto a partir del resultado
+                        TipoObstaculo tipoObstaculo = new TipoObstaculo();
+                        tipoObstaculo.setIdTipo(rs.getInt("ID_Tipo"));
+                        tipoObstaculo.setDescripcion(rs.getString("Descripcion"));
+                        obstaculo.setTipoObstaculo(tipoObstaculo);
+
+                        Punto punto = new Punto();
+                        punto.setIdPunto(ID_Punto);
+                        punto.setLatitud(rs.getDouble("Latitud"));
+                        punto.setLongitud(rs.getDouble("Longitud"));
+                        obstaculo.setPunto(punto);
+
+                        // Si necesitas incluir datos de Usuario, puedes hacer una consulta o incluir los valores en la consulta SQL principal
+                        Usuario usuario = new Usuario();
+                        usuario.setID_Usuario(rs.getInt("ID_Usuario"));
+                        usuario.setNombre(rs.getString("Nombre"));
+                        usuario.setApellido(rs.getString("Apellido"));
+                        usuario.setDNI(rs.getString("DNI"));
+                        usuario.setUser(rs.getString("User"));
+                        usuario.setPass(rs.getString("Pass"));
+                        usuario.setCorreo(rs.getString("Correo"));
+                        usuario.setFechaRegistro(rs.getDate("FechaRegistro"));
+                        usuario.setPuntaje(rs.getInt("Puntaje"));
+                        usuario.setEstado(rs.getBoolean("Estado"));
+                        obstaculo.setUsuario(usuario);
+                    }
+                    rs.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return obstaculo;
+        });
+
+        // Espera el resultado y devuelve el objeto
+        try {
+            obstaculoobj = result.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            executor.shutdown();
+        }
+
+        return obstaculoobj;
+    }
 
 
 
