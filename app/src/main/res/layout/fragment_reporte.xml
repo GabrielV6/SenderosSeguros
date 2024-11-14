@@ -139,7 +139,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="60dp"
-        android:backgroundTint="#F95959"
+        android:backgroundTint="#2C3E50"
         android:padding="10dp"
         android:text="GENERAR"
         android:textColor="#FFFFFF"
