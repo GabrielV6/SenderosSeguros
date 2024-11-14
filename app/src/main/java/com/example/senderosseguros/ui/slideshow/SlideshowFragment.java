@@ -237,6 +237,8 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                             };
                         }
                     });
+                }else {
+                    trashButton.setVisibility(View.INVISIBLE);
                 }
 
 
