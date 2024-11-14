@@ -98,7 +98,6 @@
         android:hint="Descripción"
         android:minHeight="100dp"
         android:padding="18dp"
-        android:text="La empresa EDENOR está llevando a cabo arreglos en la vereda que obstaculizan parcialmente la misma."
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"

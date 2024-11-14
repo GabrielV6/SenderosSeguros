@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -100,7 +101,6 @@ public class ReportarFragment extends Fragment {
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> parentView) {
-                        // Manejo de cuando no se selecciona nada
                         barrioAdapter.notifyDataSetChanged();
                     }
                 });
@@ -108,13 +108,13 @@ public class ReportarFragment extends Fragment {
             });
         }).start();
 
-
         binding.reportButton.setOnClickListener(v -> {
             if (punto1 != null && selectedOption != null && barrioSeleccionado != null) {
 
                 Punto punto = new Punto();
                 Barrio barrio = new Barrio();
                 Usuario usuario = new Usuario();
+                Obstaculo obstaculo = new Obstaculo();
 
                 punto.setBarrio(barrioSeleccionado);
                 punto.setLatitud(punto1.latitude);
@@ -126,24 +126,19 @@ public class ReportarFragment extends Fragment {
 
                 int idUsuario = SessionManager.getInstance().getID_User();
                 usuario = accesoDatos.obtenerUsuarioPorId(idUsuario);
-//ESTOS DATOS LOS PUSE POR DEFECTO, hay que acomodarlos
-                String comentarios = "Descripción del obstáculo"; //recuperar el texto del fragment de estef
-                String imagen = null;
-                Date fechaBaja = null;
-                int contadorSolucion = 0;
-                boolean estado = true;
-//*********************************************************
-                if (idPunto != -1) {  // Si la inserción fue exitosa (idPunto es diferente de -1)
-                    Obstaculo obstaculo = new Obstaculo(
-                            tipoObstaculo, //objeto
-                            comentarios,
-                            imagen,
-                            punto, //objeto
-                            usuario, //objeto
-                            fechaBaja,
-                            contadorSolucion,
-                            estado
-                    );
+
+                if (idPunto != -1) {
+                    EditText descripcionText = binding.descripcionText;
+                    String descripcion = descripcionText.getText().toString();
+
+                    obstaculo.setTipoObstaculo(tipoObstaculo);
+                    obstaculo.setComentarios(descripcion);
+                    obstaculo.setImagen(null);
+                    obstaculo.setPunto(punto);
+                    obstaculo.setUsuario(usuario);
+                    obstaculo.setFechaBaja(null);
+                    obstaculo.setContadorSolucion(0);
+                    obstaculo.setEstado(true);
 
                     boolean exito = accesoDatos.insertarObstaculo(obstaculo);
 
@@ -162,7 +157,6 @@ public class ReportarFragment extends Fragment {
             }
         });
 
-        // Configurar el botón volver
         binding.volverButton.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
             navController.navigate(R.id.nav_slideshow);
