@@ -210,15 +210,40 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                 } else {
                     likeButton.setVisibility(View.INVISIBLE);
                 }
+
+                // Metodos y logica para el trash
+                boolean estaReportado = accesoDatos.chequearReportado(id_obstaculo, id_user_login);
+                if(!estaReportado){
+                    trashButton.setVisibility(View.VISIBLE);
+                    trashButton.setOnClickListener(v -> {
+                        boolean registrarSO = accesoDatos.registrarSolucionObstaculos(id_user_login, id_obstaculo);
+
+                        if(registrarSO){
+                            int contadorSolucionObstaculo = obstaculo.getContadorSolucion();
+
+                            if (contadorSolucionObstaculo < 5){
+                                boolean sumarCS = accesoDatos.sumarContadorSolucion(id_obstaculo);
+                                Toast.makeText(requireContext(), "Trash +1", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireContext(), "¡Has reportado este obstáculo!", Toast.LENGTH_SHORT).show();
+                                trashButton.setVisibility(View.INVISIBLE);
+                            };
+
+                            if(contadorSolucionObstaculo == 5){
+                                boolean bajaObstaculo = accesoDatos.bajaObstaculo(id_obstaculo);
+                                if(bajaObstaculo){
+                                    Toast.makeText(requireContext(), "El obstaculo ha sido dado de baja.", Toast.LENGTH_SHORT).show();
+                                    trashButton.setVisibility(View.INVISIBLE);
+                                }
+                            };
+                        }
+                    });
+                }
+
+
             });
 
             // Este Toast se ejecuta de inmediato y no tiene acceso a idPunto, porque el código que obtiene el idPunto es asincrónico.
             Toast.makeText(getContext(), "Obstáculo " + markerTitle, Toast.LENGTH_SHORT).show();
-
-
-            trashButton.setVisibility(View.VISIBLE);
-
-
             return false;
         });
 

@@ -1093,6 +1093,152 @@ public class AccesoDatos {
         }
     }
 
+    // Metodo para chequear si un usuario reporto un obstaculo
+    public boolean chequearReportado(int idObstaculo, int idUserLogin) {
+        executor = Executors.newSingleThreadExecutor();
+        final boolean[] existe = {false};
 
+        executor.execute(() -> {
+            Connection con = null;
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                String query = "SELECT COUNT(*) AS cantReportada FROM SolucionObstaculos WHERE ID_Obstaculo = ? AND ID_Usuario_que_reporta_baja = ?";
+                PreparedStatement ps = con.prepareStatement(query);
+                ps.setInt(1, idObstaculo);
+                ps.setInt(2, idUserLogin);
 
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    int count = rs.getInt("cantReportada");
+                    existe[0] = count > 0;
+                }
+
+                rs.close();
+                ps.close();
+                con.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        try {
+            // Espera que el hilo termine
+            executor.shutdown();
+            executor.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return existe[0];
+    }
+
+    //Metodo para registrar SolucionObstaculos
+    public boolean registrarSolucionObstaculos(int id_user_login, int id_obstaculo){
+        executor = Executors.newSingleThreadExecutor();
+        Future<Boolean> result = executor.submit(() -> {
+            try {
+                Class.forName(DataDB.driver);
+                String query = "INSERT INTO SolucionObstaculos (`ID_Obstaculo`, `ID_Usuario_que_reporta_baja`) VALUES (?,?)";
+
+                try (Connection con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                     PreparedStatement ps = con.prepareStatement(query)) {
+                    ps.setInt(1, id_obstaculo);
+                    ps.setInt(2,id_user_login);
+
+                    int rowsAffected = ps.executeUpdate();
+                    return rowsAffected > 0;
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+        });
+
+        try {
+            return result.get(); // Obtener el resultado de la ejecución asincrónica
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            executor.shutdown();  // Cierra el executor para liberar recursos
+        }
+    }
+
+    //Metodo para sumar ContadorSolucion en obstaculo
+    public boolean sumarContadorSolucion(int idObstaculo) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Boolean> result = executor.submit(() -> {
+            try {
+                Class.forName(DataDB.driver);
+                String query = "UPDATE Obstaculos SET ContadoSolucion = ContadoSolucion + 1 WHERE ID_Obstaculo = ?";
+                try (Connection con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                     PreparedStatement ps = con.prepareStatement(query)) {
+
+                    ps.setInt(1, idObstaculo);
+
+                    // Ejecutar la actualización y verificar el número de filas afectadas
+                    int rowsAffected = ps.executeUpdate();
+                    return rowsAffected > 0;
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+        });
+
+        try {
+            return result.get(); // Obtener el resultado de la ejecución asincrónica
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            executor.shutdown();  // Cierra el executor para liberar recursos
+        }
+    }
+
+    //Metodo para dar de baja un obstaculo.
+    public boolean bajaObstaculo(int idObstaculo) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Boolean> result = executor.submit(() -> {
+            try {
+                Class.forName(DataDB.driver);
+                String query = "UPDATE Obstaculos SET Estado = 0 WHERE ID_Obstaculo = ?";
+                try (Connection con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                     PreparedStatement ps = con.prepareStatement(query)) {
+
+                    ps.setInt(1, idObstaculo);
+
+                    // Ejecutar la actualización y verificar el número de filas afectadas
+                    int rowsAffected = ps.executeUpdate();
+                    return rowsAffected > 0;
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+        });
+
+        try {
+            return result.get(); // Obtener el resultado de la ejecución asincrónica
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            executor.shutdown();  // Cierra el executor para liberar recursos
+        }
+    }
 }
