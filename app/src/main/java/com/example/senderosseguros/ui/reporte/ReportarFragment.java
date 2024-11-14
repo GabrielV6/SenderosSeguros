@@ -80,7 +80,8 @@ public class ReportarFragment extends Fragment {
             List<Barrio> barrios = accesoDatos.obtenerBarrios();
             barrios.add(0, new Barrio(-1, seleccionarBarrio));
             new Handler(Looper.getMainLooper()).post(() -> {
-                ArrayAdapter<Barrio> barrioAdapter = new ArrayAdapter<>(getContext(),
+                if (binding != null) {
+                    ArrayAdapter<Barrio> barrioAdapter = new ArrayAdapter<>(getContext(),
                         android.R.layout.simple_spinner_item, barrios);
 
                 barrioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -99,12 +100,14 @@ public class ReportarFragment extends Fragment {
                         }
                         barrioAdapter.notifyDataSetChanged();
                     }
+
                     @Override
                     public void onNothingSelected(AdapterView<?> parentView) {
                         barrioAdapter.notifyDataSetChanged();
                     }
                 });
                 barrioAdapter.notifyDataSetChanged();  // Esto asegura que el Spinner actualice su vista
+                }
             });
         }).start();
 
@@ -158,8 +161,10 @@ public class ReportarFragment extends Fragment {
         });
 
         binding.volverButton.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
-            navController.navigate(R.id.nav_slideshow);
+            if (binding != null) {
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+                navController.navigate(R.id.nav_slideshow);
+            }
         });
         return root;
     }
