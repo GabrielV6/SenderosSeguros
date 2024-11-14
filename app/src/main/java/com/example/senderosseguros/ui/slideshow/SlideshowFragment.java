@@ -149,7 +149,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         bundle.putString("selected_option", option); // Pasar la opción seleccionada
         bundle.putDouble("latitud", punto1.latitude);  // Latitud del punto1
         bundle.putDouble("longitud", punto1.longitude); // Longitud del punto1
-        
+
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
         navController.navigate(R.id.nav_reportar, bundle);
     }
@@ -179,6 +179,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             String markerTitle = marker.getTitle();
             String latitudObstaculo = String.valueOf(marker.getPosition().latitude);
             String longitudObstaculo = String.valueOf(marker.getPosition().longitude);
+
             int id_user_login = SessionManager.getInstance().getID_User();
             accesoDatos.obtenerID_Punto(latitudObstaculo, longitudObstaculo, idPunto -> {
                 // Aquí ya tienes el idPunto después de que se obtenga
@@ -186,61 +187,66 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
 
                 // Ahora puedes usar el idPunto para obtener el obstáculo
                 Obstaculo obstaculo = accesoDatos.obtenerObstaculo(idPunto);
-                int id_obstaculo = obstaculo.getIdObstaculo();
-                int id_usuario_creador= obstaculo.getUsuario().getID_Usuario();
-                boolean estaPuntuado = accesoDatos.chequearCalificado(id_user_login, id_obstaculo);
-                // Si necesitas hacer algo más con el idPunto o el obstáculo, lo puedes hacer aquí //si esta puntuado 1(true) sino 0,
-                if (!estaPuntuado) {
-                    likeButton.setVisibility(View.VISIBLE);
-                    likeButton.setOnClickListener(v -> {
-                        boolean calificado = accesoDatos.registrarPuntuacion(id_user_login, id_obstaculo);
-                        if (calificado) {
-                            Toast.makeText(requireContext(), "¡Has puntuado este obstáculo!", Toast.LENGTH_SHORT).show();
-                            likeButton.setVisibility(View.INVISIBLE);
 
-                            // Sumar puntaje al usuario creador del obstáculo
-                            boolean puntajeSumado = accesoDatos.sumarPuntajeAlCreador(id_usuario_creador);
-                            if (puntajeSumado) {
-                                Toast.makeText(requireContext(), "¡El creador del obstáculo recibió un punto!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(requireContext(), "Error al actualizar puntaje del creador", Toast.LENGTH_SHORT).show();
+                if (obstaculo != null) {
+
+                    int id_obstaculo = obstaculo.getIdObstaculo();
+                    int id_usuario_creador = obstaculo.getUsuario().getID_Usuario();
+                    boolean estaPuntuado = accesoDatos.chequearCalificado(id_user_login, id_obstaculo);
+                    // Si necesitas hacer algo más con el idPunto o el obstáculo, lo puedes hacer aquí //si esta puntuado 1(true) sino 0,
+                    if (!estaPuntuado) {
+                        likeButton.setVisibility(View.VISIBLE);
+                        likeButton.setOnClickListener(v -> {
+                            boolean calificado = accesoDatos.registrarPuntuacion(id_user_login, id_obstaculo);
+                            if (calificado) {
+                                Toast.makeText(requireContext(), "¡Has puntuado este obstáculo!", Toast.LENGTH_SHORT).show();
+                                likeButton.setVisibility(View.INVISIBLE);
+
+                                // Sumar puntaje al usuario creador del obstáculo
+                                boolean puntajeSumado = accesoDatos.sumarPuntajeAlCreador(id_usuario_creador);
+                                if (puntajeSumado) {
+                                    Toast.makeText(requireContext(), "¡El creador del obstáculo recibió un punto!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(requireContext(), "Error al actualizar puntaje del creador", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
-                } else {
-                    likeButton.setVisibility(View.INVISIBLE);
-                }
+                        });
+                    } else {
+                        likeButton.setVisibility(View.INVISIBLE);
+                    }
 
-                // Metodos y logica para el trash
-                boolean estaReportado = accesoDatos.chequearReportado(id_obstaculo, id_user_login);
-                if(!estaReportado){
-                    trashButton.setVisibility(View.VISIBLE);
-                    trashButton.setOnClickListener(v -> {
-                        boolean registrarSO = accesoDatos.registrarSolucionObstaculos(id_user_login, id_obstaculo);
+                    // Metodos y logica para el trash
+                    boolean estaReportado = accesoDatos.chequearReportado(id_obstaculo, id_user_login);
+                    if (!estaReportado) {
+                        trashButton.setVisibility(View.VISIBLE);
+                        trashButton.setOnClickListener(v -> {
+                            boolean registrarSO = accesoDatos.registrarSolucionObstaculos(id_user_login, id_obstaculo);
 
-                        if(registrarSO){
-                            int contadorSolucionObstaculo = obstaculo.getContadorSolucion();
+                            if (registrarSO) {
+                                int contadorSolucionObstaculo = obstaculo.getContadorSolucion();
 
-                            if (contadorSolucionObstaculo < 5){
-                                boolean sumarCS = accesoDatos.sumarContadorSolucion(id_obstaculo);
-                                Toast.makeText(requireContext(), "Trash +1", Toast.LENGTH_SHORT).show();
-                                Toast.makeText(requireContext(), "¡Has reportado este obstáculo!", Toast.LENGTH_SHORT).show();
-                                trashButton.setVisibility(View.INVISIBLE);
-                            };
-
-                            if(contadorSolucionObstaculo == 5){
-                                boolean bajaObstaculo = accesoDatos.bajaObstaculo(id_obstaculo);
-                                if(bajaObstaculo){
-                                    Toast.makeText(requireContext(), "El obstaculo ha sido dado de baja.", Toast.LENGTH_SHORT).show();
+                                if (contadorSolucionObstaculo < 5) {
+                                    boolean sumarCS = accesoDatos.sumarContadorSolucion(id_obstaculo);
+                                    Toast.makeText(requireContext(), "Trash +1", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(requireContext(), "¡Has reportado este obstáculo!", Toast.LENGTH_SHORT).show();
                                     trashButton.setVisibility(View.INVISIBLE);
                                 }
-                            };
-                        }
-                    });
-                }else {
-                    trashButton.setVisibility(View.INVISIBLE);
-                }
+                                ;
 
+                                if (contadorSolucionObstaculo == 5) {
+                                    boolean bajaObstaculo = accesoDatos.bajaObstaculo(id_obstaculo);
+                                    if (bajaObstaculo) {
+                                        Toast.makeText(requireContext(), "El obstaculo ha sido dado de baja.", Toast.LENGTH_SHORT).show();
+                                        trashButton.setVisibility(View.INVISIBLE);
+                                    }
+                                }
+                                ;
+                            }
+                        });
+                    } else {
+                        trashButton.setVisibility(View.INVISIBLE);
+                    }
+                }
 
             });
 
@@ -253,7 +259,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         mMap.setOnMapClickListener(latLng -> {
             likeButton.setVisibility(View.INVISIBLE);
             trashButton.setVisibility(View.INVISIBLE);
-            if (punto1!=null && punto2!=null) {
+            if (punto1 != null && punto2 != null) {
                 mMap.clear();
                 getCurrentLocation();
                 obstaculosMarcados();
