@@ -571,7 +571,7 @@ public class AccesoDatos {
 
             try {
                 Class.forName(DataDB.driver);
-                String query = "SELECT ID_Punto, Latitud, Longitud, Altitud, ID_Barrio FROM Puntos WHERE ID_Punto = ?";
+                String query = "SELECT ID_Punto, Latitud, Longitud, ID_Barrio FROM Puntos WHERE ID_Punto = ?";
 
                 try (Connection conn = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
                      PreparedStatement ps = conn.prepareStatement(query)) {
