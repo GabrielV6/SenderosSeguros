@@ -38,43 +38,6 @@ public class AccesoDatos {
         context = ct;
     }
 
-    public boolean obtenerTextoDesdeBD() {
-        executor = Executors.newSingleThreadExecutor();
-        final boolean[] existe = {false};
-
-        executor.execute(() -> {
-            Connection con = null;
-            try {
-                Class.forName(DataDB.driver);
-                con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
-                String query = "SELECT COUNT(*) AS total FROM Barrios";
-                PreparedStatement ps = con.prepareStatement(query);
-                /*ps.setInt(1, ID);*/
-                ResultSet rs = ps.executeQuery();
-
-                if (rs.next()) {
-                    int count = rs.getInt("total");
-                    existe[0] = count > 0;
-                }
-
-                rs.close();
-                ps.close();
-                con.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-        try {
-            // Espera que el hilo termine
-            executor.shutdown();
-            executor.awaitTermination(5, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return existe[0];
-    }
     public List<Barrio> obtenerBarrios() {
         List<Barrio> barrios = new ArrayList<>();
         executor = Executors.newSingleThreadExecutor();
@@ -622,7 +585,7 @@ public class AccesoDatos {
                             double longitud = rs.getDouble("Longitud");
                             int idBarrio = rs.getInt("ID_Barrio");
 
-                            Barrio barrio = obtenerBarrioPorId(idBarrio); // Asumimos que este método devuelve un Barrio
+                            Barrio barrio = obtenerBarrioPorId(idBarrio); // Asumimos que este metodo devuelve un Barrio
                             punto = new Punto(idPunto, latitud, longitud, barrio);
                         }
                     }
@@ -1028,6 +991,42 @@ public class AccesoDatos {
         return obstaculoobj;
     }
 
+    public boolean registrarPuntuacion(int id_user_login, int id_obstaculo){
+
+            executor = Executors.newSingleThreadExecutor();
+            Future<Boolean> result = executor.submit(() -> {
+                try {
+                    Class.forName(DataDB.driver);
+                    String query = "INSERT INTO PuntuacionUsuarios (`ID_Obstaculo`, `ID_Usuario_que_puntua`, `Puntaje_asignado`) VALUES (?,?,?)";
+
+                    try (Connection con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                         PreparedStatement ps = con.prepareStatement(query)) {
+                        ps.setInt(1, id_obstaculo);
+                        ps.setInt(2,id_user_login);
+                       ps.setInt(3,1);
+
+                        int rowsAffected = ps.executeUpdate();
+                        return rowsAffected > 0;
+
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            });
+
+        try {
+            return result.get(); // Obtener el resultado de la ejecución asincrónica
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            executor.shutdown();  // Cierra el executor para liberar recursos
+        }
+    }
 
 
 }

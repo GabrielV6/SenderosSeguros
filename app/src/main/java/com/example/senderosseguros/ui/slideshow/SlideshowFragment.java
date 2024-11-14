@@ -188,11 +188,19 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                 Obstaculo obstaculo = accesoDatos.obtenerObstaculo(idPunto);
                 int id_obstaculo = obstaculo.getIdObstaculo();
                 boolean estaPuntuado = accesoDatos.chequearCalificado(id_user_login, id_obstaculo);
-                // Si necesitas hacer algo más con el idPunto o el obstáculo, lo puedes hacer aquí
-                if (!estaPuntuado)
+                // Si necesitas hacer algo más con el idPunto o el obstáculo, lo puedes hacer aquí //si esta puntuado 1(true) sino 0,
+                if (!estaPuntuado){
                     likeButton.setVisibility(View.VISIBLE);
+                likeButton.setOnClickListener(v -> {
+
+                    boolean calificado = accesoDatos.registrarPuntuacion(id_user_login, id_obstaculo); // Ejemplo de acción, registrar puntuación
+                    if(calificado) {
+                        Toast.makeText(requireContext(), "¡Has puntuado este obstáculo!", Toast.LENGTH_SHORT).show();
+                        likeButton.setVisibility(View.INVISIBLE); // Ocultar el botón después de puntuar
+                    }
+                });}
                 else
-                    trashButton.setVisibility(View.INVISIBLE);
+                    likeButton.setVisibility(View.INVISIBLE);
             });
 
             // Este Toast se ejecuta de inmediato y no tiene acceso a idPunto, porque el código que obtiene el idPunto es asincrónico.
