@@ -916,39 +916,67 @@ public class AccesoDatos {
         void onIDPuntoObtenido(int idPunto);
     }
 
-    public Obstaculo obtenerObstaculo(int ID_Punto) {
-       Obstaculo obstaculoobj= null;
-        String query = "SELECT * FROM Obstaculos WHERE ID_Punto = ? AND Estado = 1";
 
-        // Ejecuta la consulta en un nuevo hilo
+    public Obstaculo obtenerObstaculo(int ID_Punto) {
+        Obstaculo obstaculoobj = null;
+        String query = "SELECT \n" +
+                "    o.ID_Obstaculo,\n" +
+                "    o.Comentarios,\n" +
+                "    o.Imagen,\n" +
+                "    o.FechaCreacion,\n" +
+                "    o.FechaBaja,\n" +
+                "    o.ContadorSolucion,\n" +
+                "    o.Estado AS EstadoObstaculo,\n" +
+                "    u.ID_Usuario,\n" +
+                "    u.Nombre AS NombreUsuario,\n" +
+                "    u.Apellido AS ApellidoUsuario,\n" +
+                "    u.DNI,\n" +
+                "    u.CorreoElectronico,\n" +
+                "    u.Usuario,\n" +
+                "    u.FechaRegistro,\n" +
+                "    u.Puntaje,\n" +
+                "    u.Estado AS EstadoUsuario,\n" +
+                "    c.ID_TipoObstaculo,\n" +
+                "    c.Descripcion AS DescripcionObstaculo,\n" +
+                "    p.ID_Punto,\n" +
+                "    p.Latitud,\n" +
+                "    p.Longitud\n" +
+                "FROM \n" +
+                "    Obstaculos o\n" +
+                "JOIN \n" +
+                "    Usuarios u ON o.ID_Usuario = u.ID_Usuario\n" +
+                "JOIN \n" +
+                "    CatalogoObstaculos c ON o.ID_TipoObstaculo = c.ID_TipoObstaculo\n" +
+                "JOIN \n" +
+                "    Puntos p ON o.ID_Punto = p.ID_Punto\n" +
+                "WHERE \n" +
+                "    o.Estado = 1 AND o.ID_Punto = ?;";
+
         executor = Executors.newSingleThreadExecutor();
         Future<Obstaculo> result = executor.submit(() -> {
-            Obstaculo obstaculo = new Obstaculo();
+            Obstaculo obstaculo = null;
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 try (Connection con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
                      PreparedStatement ps = con.prepareStatement(query)) {
 
-                    // Establece el parÃ¡metro de la consulta
+                    // Establece el parámetro de la consulta
                     ps.setInt(1, ID_Punto);
 
-                    // Ejecuta la consulta y procesa el resultado
                     ResultSet rs = ps.executeQuery();
                     if (rs.next()) {
-
-
+                        obstaculo = new Obstaculo();
                         obstaculo.setIdObstaculo(rs.getInt("ID_Obstaculo"));
                         obstaculo.setComentarios(rs.getString("Comentarios"));
                         obstaculo.setImagen(rs.getString("Imagen"));
                         obstaculo.setFechaCreacion(rs.getDate("FechaCreacion"));
                         obstaculo.setFechaBaja(rs.getDate("FechaBaja"));
                         obstaculo.setContadorSolucion(rs.getInt("ContadorSolucion"));
-                        obstaculo.setEstado(rs.getBoolean("Estado"));
+                        obstaculo.setEstado(rs.getBoolean("EstadoObstaculo"));
 
-                        // Instancia TipoObstaculo y Punto a partir del resultado
                         TipoObstaculo tipoObstaculo = new TipoObstaculo();
-                        tipoObstaculo.setIdTipo(rs.getInt("ID_Tipo"));
-                        tipoObstaculo.setDescripcion(rs.getString("Descripcion"));
+                        tipoObstaculo.setIdTipo(rs.getInt("ID_TipoObstaculo"));
+                        tipoObstaculo.setDescripcion(rs.getString("DescripcionObstaculo"));
                         obstaculo.setTipoObstaculo(tipoObstaculo);
 
                         Punto punto = new Punto();
@@ -957,18 +985,16 @@ public class AccesoDatos {
                         punto.setLongitud(rs.getDouble("Longitud"));
                         obstaculo.setPunto(punto);
 
-                        // Si necesitas incluir datos de Usuario, puedes hacer una consulta o incluir los valores en la consulta SQL principal
                         Usuario usuario = new Usuario();
                         usuario.setID_Usuario(rs.getInt("ID_Usuario"));
-                        usuario.setNombre(rs.getString("Nombre"));
-                        usuario.setApellido(rs.getString("Apellido"));
+                        usuario.setNombre(rs.getString("NombreUsuario"));
+                        usuario.setApellido(rs.getString("ApellidoUsuario"));
                         usuario.setDNI(rs.getString("DNI"));
-                        usuario.setUser(rs.getString("User"));
-                        usuario.setPass(rs.getString("Pass"));
-                        usuario.setCorreo(rs.getString("Correo"));
+                        usuario.setCorreo(rs.getString("CorreoElectronico"));
+                        usuario.setUser(rs.getString("Usuario"));
                         usuario.setFechaRegistro(rs.getDate("FechaRegistro"));
                         usuario.setPuntaje(rs.getInt("Puntaje"));
-                        usuario.setEstado(rs.getBoolean("Estado"));
+                        usuario.setEstado(rs.getBoolean("EstadoUsuario"));
                         obstaculo.setUsuario(usuario);
                     }
                     rs.close();
@@ -978,10 +1004,8 @@ public class AccesoDatos {
             }
             return obstaculo;
         });
-
-        // Espera el resultado y devuelve el objeto
         try {
-            obstaculoobj = result.get();
+            obstaculoobj = result.get(); // Aquí esperamos el resultado de Future
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         } finally {
@@ -1027,6 +1051,48 @@ public class AccesoDatos {
             executor.shutdown();  // Cierra el executor para liberar recursos
         }
     }
+
+    public boolean sumarPuntajeAlCreador(int id_usuario_creador) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Boolean> result = executor.submit(() -> {
+            try {
+                // Cargar el driver de MySQL
+                Class.forName(DataDB.driver);
+
+                // Consulta para actualizar el puntaje del usuario
+                String query = "UPDATE Usuarios SET Puntaje = Puntaje + 1 WHERE ID_Usuario = ?";
+
+                // Establecer conexión y preparar la consulta
+                try (Connection con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
+                     PreparedStatement ps = con.prepareStatement(query)) {
+
+                    // Asignar valor al parámetro de la consulta
+                    ps.setInt(1, id_usuario_creador);
+
+                    // Ejecutar la actualización y verificar el número de filas afectadas
+                    int rowsAffected = ps.executeUpdate();
+                    return rowsAffected > 0;
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+        });
+
+        try {
+            return result.get(); // Obtener el resultado de la ejecución asincrónica
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            executor.shutdown();  // Cierra el executor para liberar recursos
+        }
+    }
+
 
 
 }
