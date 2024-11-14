@@ -213,7 +213,7 @@ public class ReporteFragment extends Fragment {
         }
 
         PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        dataSet.setColors(ColorTemplate.JOYFUL_COLORS );
         dataSet.setValueTextColor(Color.BLACK);
         dataSet.setValueTextSize(12f);
 
@@ -243,6 +243,7 @@ public class ReporteFragment extends Fragment {
 
         // Hacer visible el gráfico
         pieChart.setVisibility(View.VISIBLE);
+        binding.buttonVolver.setVisibility(View.VISIBLE);
         binding.textUltimosTresMeses.setVisibility(View.VISIBLE);
     }
 
@@ -259,8 +260,8 @@ public class ReporteFragment extends Fragment {
         // Ocultar el GRAFICO Y TEXTO
         pieChart.setVisibility(View.GONE);
         binding.textUltimosTresMeses.setVisibility(View.GONE);
-        // Ocultar el botón volver
         binding.buttonVolver.setVisibility(View.GONE);
+
         limpiarRbSpinner();
     }
 
