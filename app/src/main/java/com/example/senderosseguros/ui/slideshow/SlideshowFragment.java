@@ -265,7 +265,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             // Limpia el mapa y agrega ambos puntos como marcadores (si existen)
             //mMap.clear();
             if (punto1 != null) {
-                mMap.addMarker(new MarkerOptions().position(punto1).title("Punto 1"));
+                //mMap.addMarker(new MarkerOptions().position(punto1).title("Punto 1"));
             }
             if (punto2 != null) {
                 mMap.addMarker(new MarkerOptions().position(punto2).title("Punto 2"));
@@ -423,7 +423,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                         if (location != null) {
                             LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
                             punto1 = currentLocation;
-                            mMap.addMarker(new MarkerOptions().position(currentLocation).title("Mi ubicacion"));
+                           // mMap.addMarker(new MarkerOptions().position(currentLocation).title("Mi ubicacion"));
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f));
                         }
                     });
