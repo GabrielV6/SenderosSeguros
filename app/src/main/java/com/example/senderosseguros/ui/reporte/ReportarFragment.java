@@ -43,7 +43,7 @@ public class ReportarFragment extends Fragment {
     private LatLng punto2;
     private String selectedOption;
     private AccesoDatos accesoDatos;
-    private Barrio barrioSeleccionado = null;  // Variable para almacenar el barrio seleccionado
+    private Barrio barrioSeleccionado = null;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -59,9 +59,6 @@ public class ReportarFragment extends Fragment {
             double longitudPunto1 = getArguments().getDouble("longitud");
 
             punto1 = new LatLng(latitudPunto1, longitudPunto1);
-
-            // coordenadas para verificar que seleccione el punto 1
-            Toast.makeText(getContext(), "Punto 1: " + punto1.latitude + ", " + punto1.longitude, Toast.LENGTH_SHORT).show();
         }
 
         int selectedId = Integer.parseInt(selectedOption);
@@ -87,7 +84,6 @@ public class ReportarFragment extends Fragment {
                 barrioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 binding.spinnerBarrio.setAdapter(barrioAdapter);
 
-                // Agregar un listener para capturar la selección del barrio
                 binding.spinnerBarrio.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {

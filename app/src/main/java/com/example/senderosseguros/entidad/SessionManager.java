@@ -14,12 +14,10 @@ public class SessionManager {
         return instance;
     }
 
-    // Obtener el ID_User
     public int getID_User() {
         return ID_User;
     }
 
-    // Establecer el ID_User
     public void setID_User(int ID_User) {
         this.ID_User = ID_User;
     }

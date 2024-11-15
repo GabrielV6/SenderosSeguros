@@ -6,7 +6,6 @@
     android:background="#C6F4B5"
     android:padding="16dp">
 
-    <!-- Botón Volver -->
     <ImageButton
         android:id="@+id/volver_button"
         android:layout_width="48dp"
@@ -18,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Título -->
     <TextView
         android:id="@+id/title_reportar"
         android:layout_width="wrap_content"
@@ -32,10 +30,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/volver_button" />
-
-    <!-- Etiqueta Tipo -->
-
-    <!-- Campo Tipo (Spinner) -->
 
     <TextView
         android:id="@+id/subtitle_tipo"
@@ -64,10 +58,6 @@
         app:layout_constraintTop_toBottomOf="@id/subtitle_tipo"
         app:layout_constraintWidth_percent="0.8" />
 
-    <!-- Etiqueta Barrios -->
-
-    <!-- Spinner Barrios -->
-
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -92,10 +82,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView3"
         app:layout_constraintWidth_percent="0.8" />
-
-    <!-- Etiqueta Descripción -->
-
-    <!-- Campo Descripción (con bordes redondeados) -->
 
     <TextView
         android:id="@+id/subtitle_descripcion"
@@ -125,7 +111,6 @@
         app:layout_constraintTop_toBottomOf="@id/subtitle_descripcion"
         app:layout_constraintWidth_percent="0.8" />
 
-    <!-- Botón Cargar Imagen -->
     <Button
         android:id="@+id/upload_image_button"
         android:layout_width="0dp"
@@ -141,7 +126,6 @@
         app:layout_constraintWidth_percent="0.8"
         android:visibility="gone" />
 
-    <!-- Botón Reportar Obstáculo -->
     <Button
         android:id="@+id/report_button"
         android:layout_width="match_parent"

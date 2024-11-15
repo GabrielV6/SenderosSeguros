@@ -42,19 +42,19 @@ public class AccesoDatos {
         List<Barrio> barrios = new ArrayList<>();
         executor = Executors.newSingleThreadExecutor();
 
-        executor.execute(() -> {  // Usamos executor para ejecutar la tarea en segundo plano
+        executor.execute(() -> {
             Connection con = null;
             try {
                 Class.forName(DataDB.driver);
                 con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
-                String query = "SELECT ID_Barrio, Descripcion FROM Barrios"; // Traemos tanto el ID como la Descripción
+                String query = "SELECT ID_Barrio, Descripcion FROM Barrios";
                 PreparedStatement ps = con.prepareStatement(query);
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()) {
-                    int idBarrio = rs.getInt("ID_Barrio"); // Traemos el ID
+                    int idBarrio = rs.getInt("ID_Barrio");
                     String descripcion = rs.getString("Descripcion");
-                    barrios.add(new Barrio(idBarrio, descripcion)); // Agregamos el objeto Barrio a la lista
+                    barrios.add(new Barrio(idBarrio, descripcion));
                 }
 
                 rs.close();
@@ -65,9 +65,8 @@ public class AccesoDatos {
             }
         });
 
-        // Esperamos a que termine la tarea en segundo plano antes de continuar (pero esto es sólo para ejemplo, puede ser mejor usar un Callback).
         try {
-            executor.awaitTermination(5, TimeUnit.SECONDS); // Esto espera un máximo de 5 segundos para que se complete la tarea
+            executor.awaitTermination(5, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -344,7 +343,6 @@ public class AccesoDatos {
         });
 
         try {
-            // Espera que el hilo termine
             executor.shutdown();
             executor.awaitTermination(5, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
@@ -386,7 +384,6 @@ public class AccesoDatos {
         });
 
         try {
-            // Espera que el hilo termine
             executor.shutdown();
             executor.awaitTermination(5, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
@@ -428,7 +425,6 @@ public class AccesoDatos {
         });
 
         try {
-            // Espera que el hilo termine
             executor.shutdown();
             executor.awaitTermination(5, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
@@ -524,7 +520,7 @@ public class AccesoDatos {
     }
 
     public int insertarPunto(Punto punto) {
-        final int[] idPunto = {-1}; // Usamos un array para obtener el valor dentro del Executor
+        final int[] idPunto = {-1};
 
         executor.execute(() -> {
             Connection con = null;
@@ -544,7 +540,7 @@ public class AccesoDatos {
                     if (rowsAffected > 0) {
                         ResultSet rs = ps.getGeneratedKeys();
                         if (rs.next()) {
-                            idPunto[0] = rs.getInt(1); // Obtenemos el ID_Punto generado
+                            idPunto[0] = rs.getInt(1);
                         }
                         rs.close();
                     }
@@ -585,7 +581,7 @@ public class AccesoDatos {
                             double longitud = rs.getDouble("Longitud");
                             int idBarrio = rs.getInt("ID_Barrio");
 
-                            Barrio barrio = obtenerBarrioPorId(idBarrio); // Asumimos que este metodo devuelve un Barrio
+                            Barrio barrio = obtenerBarrioPorId(idBarrio);
                             punto = new Punto(idPunto, latitud, longitud, barrio);
                         }
                     }
@@ -653,7 +649,7 @@ public class AccesoDatos {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         Future<Usuario> futureUsuario = executorService.submit(() -> {
-            Usuario usuario = null; // Variable local para almacenar el Usuario
+            Usuario usuario = null;
 
             try {
                 Class.forName(DataDB.driver);
@@ -666,7 +662,7 @@ public class AccesoDatos {
                 try (Connection conn = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
                      PreparedStatement ps = conn.prepareStatement(query)) {
 
-                    ps.setInt(1, idUsuario); // Establecemos el ID_Usuario a buscar
+                    ps.setInt(1, idUsuario);
 
                     try (ResultSet rs = ps.executeQuery()) {
                         if (rs.next()) {
@@ -726,7 +722,7 @@ public class AccesoDatos {
                     if (obstaculo.getFechaBaja() != null) {
                         ps.setDate(6, new java.sql.Date(obstaculo.getFechaBaja().getTime()));
                     } else {
-                        ps.setNull(6, java.sql.Types.DATE); // Si es nula, dejamos el campo como NULL
+                        ps.setNull(6, java.sql.Types.DATE);
                     }
                     ps.setInt(7, obstaculo.getContadorSolucion());
 
@@ -778,7 +774,7 @@ public class AccesoDatos {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return -1; // Devuelve -1 si no se encuentra el usuario
+            return -1;
         });
 
         try {
@@ -801,10 +797,10 @@ public class AccesoDatos {
             try {
                 Class.forName(DataDB.driver);
                 con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
-                // Consulta actualizada con los nombres de columna correctos
+
                 String query = "SELECT ID_TipoObstaculo, Descripcion, Estado FROM CatalogoObstaculos WHERE ID_TipoObstaculo = ? AND Estado = 1";
                 PreparedStatement ps = con.prepareStatement(query);
-                ps.setInt(1, id);  // Establecemos el valor del parámetro ID
+                ps.setInt(1, id);
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {
@@ -832,13 +828,12 @@ public class AccesoDatos {
         return tipoObstaculo.get();
     }
 
-    ///
     public void obtenerID_Punto(String latitud, String longitud, OnIDPuntoListener listener) {
         executor = Executors.newSingleThreadExecutor();
 
         executor.execute(() -> {
             Connection con = null;
-            int idPunto = -1; // Valor por defecto si no se encuentra el ID_Punto
+            int idPunto = -1;
 
             try {
                 Class.forName("com.mysql.jdbc.Driver");
@@ -863,7 +858,6 @@ public class AccesoDatos {
                 e.printStackTrace();
             }
 
-            // Llama al listener para pasar el resultado al hilo principal
             final int finalIdPunto = idPunto;
             new Handler(Looper.getMainLooper()).post(() -> {
                 listener.onIDPuntoObtenido(finalIdPunto);
@@ -903,7 +897,6 @@ public class AccesoDatos {
         });
 
         try {
-            // Espera que el hilo termine
             executor.shutdown();
             executor.awaitTermination(5, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
@@ -960,7 +953,6 @@ public class AccesoDatos {
                 try (Connection con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
                      PreparedStatement ps = con.prepareStatement(query)) {
 
-                    // Establece el parámetro de la consulta
                     ps.setInt(1, ID_Punto);
 
                     ResultSet rs = ps.executeQuery();
@@ -1005,7 +997,7 @@ public class AccesoDatos {
             return obstaculo;
         });
         try {
-            obstaculoobj = result.get(); // Aquí esperamos el resultado de Future
+            obstaculoobj = result.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         } finally {
@@ -1043,12 +1035,12 @@ public class AccesoDatos {
             });
 
         try {
-            return result.get(); // Obtener el resultado de la ejecución asincrónica
+            return result.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return false;
         } finally {
-            executor.shutdown();  // Cierra el executor para liberar recursos
+            executor.shutdown();
         }
     }
 
@@ -1056,20 +1048,15 @@ public class AccesoDatos {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Boolean> result = executor.submit(() -> {
             try {
-                // Cargar el driver de MySQL
                 Class.forName(DataDB.driver);
 
-                // Consulta para actualizar el puntaje del usuario
                 String query = "UPDATE Usuarios SET Puntaje = Puntaje + 1 WHERE ID_Usuario = ?";
 
-                // Establecer conexión y preparar la consulta
                 try (Connection con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
                      PreparedStatement ps = con.prepareStatement(query)) {
 
-                    // Asignar valor al parámetro de la consulta
                     ps.setInt(1, id_usuario_creador);
 
-                    // Ejecutar la actualización y verificar el número de filas afectadas
                     int rowsAffected = ps.executeUpdate();
                     return rowsAffected > 0;
 
@@ -1084,12 +1071,12 @@ public class AccesoDatos {
         });
 
         try {
-            return result.get(); // Obtener el resultado de la ejecución asincrónica
+            return result.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return false;
         } finally {
-            executor.shutdown();  // Cierra el executor para liberar recursos
+            executor.shutdown();
         }
     }
 
@@ -1125,7 +1112,6 @@ public class AccesoDatos {
         });
 
         try {
-            // Espera que el hilo termine
             executor.shutdown();
             executor.awaitTermination(5, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
@@ -1161,12 +1147,12 @@ public class AccesoDatos {
         });
 
         try {
-            return result.get(); // Obtener el resultado de la ejecución asincrónica
+            return result.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return false;
         } finally {
-            executor.shutdown();  // Cierra el executor para liberar recursos
+            executor.shutdown();
         }
     }
 
@@ -1182,7 +1168,6 @@ public class AccesoDatos {
 
                     ps.setInt(1, idObstaculo);
 
-                    // Ejecutar la actualización y verificar el número de filas afectadas
                     int rowsAffected = ps.executeUpdate();
                     return rowsAffected > 0;
 
@@ -1197,12 +1182,12 @@ public class AccesoDatos {
         });
 
         try {
-            return result.get(); // Obtener el resultado de la ejecución asincrónica
+            return result.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return false;
         } finally {
-            executor.shutdown();  // Cierra el executor para liberar recursos
+            executor.shutdown();
         }
     }
 
@@ -1218,7 +1203,6 @@ public class AccesoDatos {
 
                     ps.setInt(1, idObstaculo);
 
-                    // Ejecutar la actualización y verificar el número de filas afectadas
                     int rowsAffected = ps.executeUpdate();
                     return rowsAffected > 0;
 
@@ -1233,12 +1217,12 @@ public class AccesoDatos {
         });
 
         try {
-            return result.get(); // Obtener el resultado de la ejecución asincrónica
+            return result.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return false;
         } finally {
-            executor.shutdown();  // Cierra el executor para liberar recursos
+            executor.shutdown();
         }
     }
 }
