@@ -156,7 +156,7 @@ public class ReportarFragment extends Fragment {
                     Toast.makeText(getContext(), "Hubo un error al insertar el punto de coordenada.", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(getContext(), "Por favor, asegúrate de seleccionar el punto y el obstáculo.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Por favor, asegúrate de completar los datos", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -164,6 +164,7 @@ public class ReportarFragment extends Fragment {
             if (binding != null) {
                 NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
                 navController.navigate(R.id.nav_slideshow);
+                Toast.makeText(getContext(), "Operacion cancelada", Toast.LENGTH_SHORT).show();
             }
         });
         return root;
