@@ -129,7 +129,6 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void handleOptionSelection(String option) {
-        Toast.makeText(getContext(), "Opción seleccionada: " + option, Toast.LENGTH_SHORT).show();
         binding.frameLayout.setVisibility(View.GONE);
         getCurrentLocation();
 
