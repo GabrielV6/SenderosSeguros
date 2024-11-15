@@ -92,14 +92,6 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         likeButton = binding.like;
         trashButton.setVisibility(View.INVISIBLE);
         likeButton.setVisibility(View.INVISIBLE);
-        likeButton.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Botón de 'like' clickeado", Toast.LENGTH_SHORT).show();
-            likeButton.setVisibility(View.INVISIBLE); // Oculta el botón después de hacer clic
-        });
-        trashButton.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Botón de 'trash' clickeado", Toast.LENGTH_SHORT).show();
-            trashButton.setVisibility(View.INVISIBLE); // Oculta el botón después de hacer clic
-        });
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
@@ -108,21 +100,18 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
         requestQueue = Volley.newRequestQueue(requireActivity());
 
-
-        // Configura los OnClickListeners para las opciones
         setUpOptionButtons();
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Obtén la referencia al FrameLayout usando binding
+
                 FrameLayout frameLayout = binding.frameLayout;
 
-                // Alterna la visibilidad del FrameLayout
                 if (frameLayout.getVisibility() == View.VISIBLE) {
-                    frameLayout.setVisibility(View.GONE); // Ocultar si está visible
+                    frameLayout.setVisibility(View.GONE);
                 } else {
-                    frameLayout.setVisibility(View.VISIBLE); // Mostrar si está oculto
+                    frameLayout.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -142,7 +131,6 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
     private void handleOptionSelection(String option) {
         Toast.makeText(getContext(), "Opción seleccionada: " + option, Toast.LENGTH_SHORT).show();
         binding.frameLayout.setVisibility(View.GONE);
-        // TO DO: ACA VA LA LOGICA PARA PROCESAR EL OBSTACULO REPORTADO...
         getCurrentLocation();
 
         Bundle bundle = new Bundle();
@@ -174,6 +162,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
 
         obstaculosMarcados();
 
+        /// aca los Marker son todos los puntos marcados en el mapa, o sea los obstaculos creados y los puntos de ruta
         mMap.setOnMarkerClickListener(marker -> {
             AccesoDatos accesoDatos = new AccesoDatos(requireContext());
             String markerTitle = marker.getTitle();
@@ -182,32 +171,29 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
 
             int id_user_login = SessionManager.getInstance().getID_User();
             accesoDatos.obtenerID_Punto(latitudObstaculo, longitudObstaculo, idPunto -> {
-                // Aquí ya tienes el idPunto después de que se obtenga
-                Toast.makeText(requireContext(), "ID Punto obtenido: " + idPunto, Toast.LENGTH_SHORT).show();
-
-                // Ahora puedes usar el idPunto para obtener el obstáculo
+                // Traigo el obstaculo completo por el Idpunto
                 Obstaculo obstaculo = accesoDatos.obtenerObstaculo(idPunto);
-
+                // aca discriminamos si es un punto de ruta o si son obstaculos creados, por el IDPunto
                 if (obstaculo != null) {
 
                     int id_obstaculo = obstaculo.getIdObstaculo();
                     int id_usuario_creador = obstaculo.getUsuario().getID_Usuario();
                     boolean estaPuntuado = accesoDatos.chequearCalificado(id_user_login, id_obstaculo);
-                    // Si necesitas hacer algo más con el idPunto o el obstáculo, lo puedes hacer aquí //si esta puntuado 1(true) sino 0,
+                    // si no esta puntuado viene devuelve 0(false) y deja puntuar sino 1(true) y ponemos invisible el like.
                     if (!estaPuntuado) {
                         likeButton.setVisibility(View.VISIBLE);
                         likeButton.setOnClickListener(v -> {
                             boolean calificado = accesoDatos.registrarPuntuacion(id_user_login, id_obstaculo);
                             if (calificado) {
-                                Toast.makeText(requireContext(), "¡Has puntuado este obstáculo!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireContext(), "¡Puntuaste exitosamente al creador de este obstáculo Muchas gracias!", Toast.LENGTH_SHORT).show();
                                 likeButton.setVisibility(View.INVISIBLE);
 
-                                // Sumar puntaje al usuario creador del obstáculo
+                                // Sumamos puntaje al usuario creador del obstáculo
                                 boolean puntajeSumado = accesoDatos.sumarPuntajeAlCreador(id_usuario_creador);
                                 if (puntajeSumado) {
-                                    Toast.makeText(requireContext(), "¡El creador del obstáculo recibió un punto!", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(requireContext(), "¡El creador del obstáculo recibió un punto!", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(requireContext(), "Error al actualizar puntaje del creador", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(requireContext(), "Error al sumar el puntaje del creador", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -227,8 +213,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
 
                                 if (contadorSolucionObstaculo < 5) {
                                     boolean sumarCS = accesoDatos.sumarContadorSolucion(id_obstaculo);
-                                    Toast.makeText(requireContext(), "Trash +1", Toast.LENGTH_SHORT).show();
-                                    Toast.makeText(requireContext(), "¡Has reportado este obstáculo!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(requireContext(), "Gracias por informar la baja del obstaculo", Toast.LENGTH_SHORT).show();
                                     trashButton.setVisibility(View.INVISIBLE);
                                 }
                                 ;
@@ -236,7 +221,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                                 if (contadorSolucionObstaculo == 5) {
                                     boolean bajaObstaculo = accesoDatos.bajaObstaculo(id_obstaculo);
                                     if (bajaObstaculo) {
-                                        Toast.makeText(requireContext(), "El obstaculo ha sido dado de baja.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(requireContext(), "Efectuaste exitosamente la baja del obstaculo! Muchas gracias!", Toast.LENGTH_SHORT).show();
                                         trashButton.setVisibility(View.INVISIBLE);
                                     }
                                 }
