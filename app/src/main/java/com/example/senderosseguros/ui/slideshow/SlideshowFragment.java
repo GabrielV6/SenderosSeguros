@@ -105,7 +105,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                getCurrentLocation();
                 FrameLayout frameLayout = binding.frameLayout;
 
                 if (frameLayout.getVisibility() == View.VISIBLE) {
