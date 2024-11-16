@@ -253,10 +253,10 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             // Guarda las coordenadas del clic
             if (isFirstPoint) {
                 punto1 = latLng;
-                Toast.makeText(getContext(), "Punto 1 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Punto 1 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_SHORT).show();
             } else {
                 punto2 = latLng;
-                Toast.makeText(getContext(), "Punto 2 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Punto 2 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_SHORT).show();
             }
 
             // Alterna para que el siguiente clic guarde el segundo punto (o el primero, si ya están ambos guardados)
