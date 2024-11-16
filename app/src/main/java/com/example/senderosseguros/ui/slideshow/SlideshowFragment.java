@@ -213,6 +213,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                                 if (contadorSolucionObstaculo < 5) {
                                     boolean sumarCS = accesoDatos.sumarContadorSolucion(id_obstaculo);
                                     Toast.makeText(requireContext(), "Gracias por informar la baja del obstaculo", Toast.LENGTH_SHORT).show();
+                                    contadorSolucionObstaculo++;
                                     trashButton.setVisibility(View.INVISIBLE);
                                 }
                                 ;
