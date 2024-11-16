@@ -1162,7 +1162,7 @@ public class AccesoDatos {
         Future<Boolean> result = executor.submit(() -> {
             try {
                 Class.forName(DataDB.driver);
-                String query = "UPDATE Obstaculos SET ContadoSolucion = ContadoSolucion + 1 WHERE ID_Obstaculo = ?";
+                String query = "UPDATE Obstaculos SET ContadorSolucion = ContadorSolucion + 1 WHERE ID_Obstaculo = ?";
                 try (Connection con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
                      PreparedStatement ps = con.prepareStatement(query)) {
 
