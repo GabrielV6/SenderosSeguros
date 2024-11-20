@@ -1,5 +1,5 @@
 package com.example.senderosseguros.conexion;
-
+/*
 public class DataDB {
     // Información de la BD
     public static String host="sql10.freesqldatabase.com";
@@ -10,8 +10,8 @@ public class DataDB {
 
     public static String urlMySQL = "jdbc:mysql://" + host + ":" + port + "/" + nameBD + "?useSSL=false&allowPublicKeyRetrieval=true";
     public static String driver = "com.mysql.jdbc.Driver";
-}
- /*
+}*/
+
 
  // DB alternativa
 public class DataDB {
@@ -24,7 +24,7 @@ public class DataDB {
     public static String urlMySQL = "jdbc:mysql://" + host + ":" + port + "/" + nameBD + "?useSSL=false&allowPublicKeyRetrieval=true";
     public static String driver = "com.mysql.jdbc.Driver";
 }
-*/
+
 //CREACION DE BD
 // DROP TABLE IF EXISTS Puntos;
 //

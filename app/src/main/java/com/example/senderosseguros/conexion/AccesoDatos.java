@@ -322,7 +322,7 @@ public class AccesoDatos {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 con = DriverManager.getConnection(DataDB.urlMySQL, DataDB.user, DataDB.pass);
-                String query = "SELECT COUNT(*) AS total FROM Usuarios where usuario = ? AND contrasena = ?";
+                String query = "SELECT COUNT(*) AS total FROM Usuarios WHERE BINARY usuario = ? AND BINARY contrasena = ?";
                 PreparedStatement ps = con.prepareStatement(query);
                 ps.setString(1, user);
                 ps.setString(2, pass);
