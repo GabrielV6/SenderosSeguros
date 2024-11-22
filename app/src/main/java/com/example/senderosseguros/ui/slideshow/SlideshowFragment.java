@@ -178,8 +178,9 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                     int id_obstaculo = obstaculo.getIdObstaculo();
                     int id_usuario_creador = obstaculo.getUsuario().getID_Usuario();
                     boolean estaPuntuado = accesoDatos.chequearCalificado(id_user_login, id_obstaculo);
+                    boolean estaReportado = accesoDatos.chequearReportado(id_obstaculo, id_user_login);
                     // si no esta puntuado viene devuelve 0(false) y deja puntuar sino 1(true) y ponemos invisible el like.
-                    if (!estaPuntuado) {
+                    if (!estaPuntuado && !estaReportado) {
                         likeButton.setVisibility(View.VISIBLE);
                         likeButton.setOnClickListener(v -> {
                             boolean calificado = accesoDatos.registrarPuntuacion(id_user_login, id_obstaculo);
@@ -201,7 +202,6 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                     }
 
                     // Metodos y logica para el trash
-                    boolean estaReportado = accesoDatos.chequearReportado(id_obstaculo, id_user_login);
                     if (!estaReportado) {
                         trashButton.setVisibility(View.VISIBLE);
                         trashButton.setOnClickListener(v -> {
@@ -215,6 +215,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                                     Toast.makeText(requireContext(), "Gracias por informar la baja del obstaculo", Toast.LENGTH_SHORT).show();
                                     contadorSolucionObstaculo++;
                                     trashButton.setVisibility(View.INVISIBLE);
+                                    likeButton.setVisibility(View.INVISIBLE);
                                 }
                                 ;
 
@@ -223,6 +224,9 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                                     if (bajaObstaculo) {
                                         Toast.makeText(requireContext(), "Efectuaste exitosamente la baja del obstaculo! Muchas gracias!", Toast.LENGTH_SHORT).show();
                                         trashButton.setVisibility(View.INVISIBLE);
+                                        likeButton.setVisibility(View.INVISIBLE);
+                                        mMap.clear();
+                                        obstaculosMarcados();
                                     }
                                 }
                                 ;
