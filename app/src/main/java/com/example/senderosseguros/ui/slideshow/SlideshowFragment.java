@@ -105,7 +105,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getCurrentLocation();
+
                 FrameLayout frameLayout = binding.frameLayout;
 
                 if (frameLayout.getVisibility() == View.VISIBLE) {
@@ -185,7 +185,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                         likeButton.setOnClickListener(v -> {
                             boolean calificado = accesoDatos.registrarPuntuacion(id_user_login, id_obstaculo);
                             if (calificado) {
-                                Toast.makeText(requireContext(), "¡Puntuaste exitosamente al creador de este obstáculo Muchas gracias!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireContext(), "¡Puntuaste exitosamente al creador de este obstáculo Muchas gracias!", Toast.LENGTH_LONG).show();
                                 likeButton.setVisibility(View.INVISIBLE);
 
                                 // Sumamos puntaje al usuario creador del obstáculo
@@ -193,7 +193,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                                 if (puntajeSumado) {
                                     //Toast.makeText(requireContext(), "¡El creador del obstáculo recibió un punto!", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(requireContext(), "Error al sumar el puntaje del creador", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(requireContext(), "Error al sumar el puntaje del creador", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -212,8 +212,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
 
                                 if (contadorSolucionObstaculo < 5) {
                                     boolean sumarCS = accesoDatos.sumarContadorSolucion(id_obstaculo);
-                                    Toast.makeText(requireContext(), "Gracias por informar la baja del obstaculo", Toast.LENGTH_SHORT).show();
-                                    contadorSolucionObstaculo++;
+                                    Toast.makeText(requireContext(), "Gracias por informar la baja del obstaculo", Toast.LENGTH_LONG).show();
                                     trashButton.setVisibility(View.INVISIBLE);
                                     likeButton.setVisibility(View.INVISIBLE);
                                 }
@@ -222,7 +221,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                                 if (contadorSolucionObstaculo == 5) {
                                     boolean bajaObstaculo = accesoDatos.bajaObstaculo(id_obstaculo);
                                     if (bajaObstaculo) {
-                                        Toast.makeText(requireContext(), "Efectuaste exitosamente la baja del obstaculo! Muchas gracias!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(requireContext(), "Efectuaste exitosamente la baja del obstaculo! Muchas gracias!", Toast.LENGTH_LONG).show();
                                         trashButton.setVisibility(View.INVISIBLE);
                                         likeButton.setVisibility(View.INVISIBLE);
                                         mMap.clear();
@@ -240,7 +239,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             });
 
             // Este Toast se ejecuta de inmediato y no tiene acceso a idPunto, porque el código que obtiene el idPunto es asincrónico.
-            Toast.makeText(getContext(), "Obstáculo " + markerTitle, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Obstáculo " + markerTitle, Toast.LENGTH_LONG).show();
             return false;
         });
 
@@ -258,10 +257,10 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             // Guarda las coordenadas del clic
             if (isFirstPoint) {
                 punto1 = latLng;
-                //Toast.makeText(getContext(), "Punto 1 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Punto 1 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_LONG).show();
             } else {
                 punto2 = latLng;
-                //Toast.makeText(getContext(), "Punto 2 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Punto 2 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_LONG).show();
             }
 
             // Alterna para que el siguiente clic guarde el segundo punto (o el primero, si ya están ambos guardados)
@@ -428,7 +427,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                         if (location != null) {
                             LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
                             punto1 = currentLocation;
-                           // mMap.addMarker(new MarkerOptions().position(currentLocation).title("Mi ubicacion"));
+                            //mMap.addMarker(new MarkerOptions().position(currentLocation).title("Mi ubicacion"));
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f));
                         }
                     });
