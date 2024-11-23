@@ -102,17 +102,25 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
 
         setUpOptionButtons();
 
+        LatLng origenRuta = SessionManager.getInstance().getOrigenRuta();
+        LatLng destinoRuta = SessionManager.getInstance().getDestinoRuta();
+
+        if (origenRuta != null && destinoRuta != null) {
+            drawRoute(origenRuta, destinoRuta);
+        }
+
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                getCurrentLocation();
                 FrameLayout frameLayout = binding.frameLayout;
-
                 if (frameLayout.getVisibility() == View.VISIBLE) {
                     frameLayout.setVisibility(View.GONE);
                 } else {
                     frameLayout.setVisibility(View.VISIBLE);
                 }
+
+
             }
         });
 
@@ -239,7 +247,7 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
             });
 
             // Este Toast se ejecuta de inmediato y no tiene acceso a idPunto, porque el código que obtiene el idPunto es asincrónico.
-            Toast.makeText(getContext(), "Obstáculo " + markerTitle, Toast.LENGTH_LONG).show();
+          //  Toast.makeText(getContext(), "Obstáculo " + markerTitle, Toast.LENGTH_LONG).show();
             return false;
         });
 
@@ -260,7 +268,14 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
                 Toast.makeText(getContext(), "Punto 1 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_LONG).show();
             } else {
                 punto2 = latLng;
-                Toast.makeText(getContext(), "Punto 2 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_LONG).show();
+                SessionManager sessionManager = SessionManager.getInstance();
+                sessionManager.setOrigenRuta(null);
+                sessionManager.setDestinoRuta(null);
+
+                mMap.clear();
+                getCurrentLocation();
+                obstaculosMarcados();
+                //Toast.makeText(getContext(), "Punto 2 seleccionado: " + latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_LONG).show();
             }
 
             // Alterna para que el siguiente clic guarde el segundo punto (o el primero, si ya están ambos guardados)
@@ -406,6 +421,9 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         polylineOptions.add(new LatLng(40.7128, -74.0060));
         polylineOptions.add(new LatLng(34.0522, -118.2437));
         mMap.addPolyline(polylineOptions);*/
+
+        getRutaSession();
+
         LatLng origin = new LatLng(punto1.latitude, punto1.longitude);
         LatLng dest = new LatLng(punto2.latitude, punto2.longitude);
         drawRoute(origin, dest);
@@ -436,4 +454,9 @@ public class SlideshowFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    private void getRutaSession(){
+        SessionManager sessionManager = SessionManager.getInstance();
+        sessionManager.setOrigenRuta(punto1);
+        sessionManager.setDestinoRuta(punto2);
+    }
 }

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.senderosseguros.databinding.FragmentLogoutBinding;
 import com.example.senderosseguros.databinding.FragmentReportarBinding;
+import com.example.senderosseguros.entidad.SessionManager;
 
 public class LogoutFragment extends Fragment {
 
@@ -34,5 +35,7 @@ public class LogoutFragment extends Fragment {
 
         // Limpia el back stack para evitar regresar al fragmento anterior
         navController.popBackStack(R.id.loginFragment, false);
+
+        SessionManager.getInstance().clearRuta();
     }
 }
