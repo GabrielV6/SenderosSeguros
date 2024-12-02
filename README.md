@@ -1,4 +1,14 @@
-# TITULO
+# Senderos Seguros
+
+**Senderos Seguros** es una aplicación móvil diseñada para mejorar la movilidad de personas con discapacidades motrices y visuales, junto con sus acompañantes. Mediante la planificación de rutas accesibles, navegación asistida y un sistema colaborativo para reportar obstáculos, la app busca garantizar recorridos más seguros e inclusivos en entornos urbanos.
+
+## **Características principales**
+- **Generación de rutas accesibles** con integración a Google Maps.
+- **Reporte colaborativo de obstáculos** en tiempo real.
+
+## **Objetivo**
+Fomentar ciudades más inclusivas al conectar tecnología, accesibilidad y comunidad, comenzando con una implementación piloto y escalando a diferentes ciudades.
+
 
 
 ![image](https://github.com/user-attachments/assets/10021dff-f126-4dc8-a460-2dc62e5f9159)
