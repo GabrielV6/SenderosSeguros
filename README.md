@@ -111,10 +111,19 @@ En esta captura se muestra cómo la aplicación **Senderos Seguros** resalta los
   <img src="https://github.com/user-attachments/assets/45c39cff-84bb-4728-accb-bff6d4240630" alt="Detalle de Obstáculos en el Mapa" width="300">
 </p>
 
+---
 
-![image](https://github.com/user-attachments/assets/d46d6681-47f5-4139-8313-a3ffbb5ad127)
+### Visualización de Rutas y Obstáculos en el Mapa
 
-![image](https://github.com/user-attachments/assets/fe939079-f3f6-485a-a4da-170a469a5647)
+La interfaz de navegación de **Senderos Seguros** destaca rutas accesibles señaladas en azul, guiando al usuario por caminos adecuados. Además:
+
+- **Identificación de obstáculos**: Iconos específicos indican barreras como "Piso resbaladizo" o "Cierre", ofreciendo información útil para evitar contratiempos.
+- **Funcionalidades interactivas**: Los botones inferiores permiten reportar obstáculos, recibir alertas y acceder rápidamente a herramientas esenciales para el recorrido.
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/d46d6681-47f5-4139-8313-a3ffbb5ad127" alt="Rutas y Obstáculos en el Mapa" width="300">
+</p>
+
 
 
 
