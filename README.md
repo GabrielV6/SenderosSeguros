@@ -28,6 +28,15 @@ Este informe ayuda a los usuarios a comprender la situación actual de accesibil
 
 ![image](https://github.com/user-attachments/assets/27ccf619-21c5-4b29-b609-79faea78b169)
 
+### Informe de Obstáculos por Ubicación
+
+Este informe muestra la distribución de obstáculos clasificados por ubicación para un tipo específico, en este caso, **"Rampas"**. A través de un gráfico circular, se identifican las zonas con mayor cantidad de reportes:
+- **Centro (33.33%)**: Zona con mayor incidencia.
+- **Castellón, Pacheco, Palermo, Tigre (16.67% cada uno)**: Áreas con igual proporción de obstáculos.
+
+Esta funcionalidad permite identificar los puntos críticos para priorizar mejoras en accesibilidad.
+
+
 ![image](https://github.com/user-attachments/assets/98918897-3270-4b36-82b4-1251460d37f1)
 
 
