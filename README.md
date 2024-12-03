@@ -49,6 +49,19 @@ La funcionalidad permite priorizar las intervenciones según el tipo de incidenc
 
 ![image](https://github.com/user-attachments/assets/cf4878bd-b22e-4096-be99-eefecf5d6bff)
 
+### Reporte de Obstáculos
+
+La interfaz de reporte permite a los usuarios marcar obstáculos directamente en el mapa. Mediante un selector de categorías, pueden clasificar la incidencia según el tipo:
+- **Tipos de obstáculos disponibles**:
+  - Obra
+  - Piso resbaladizo
+  - Rampa
+  - Peligro
+  - Cierre
+  - Vereda bloqueada
+
+Esta funcionalidad fomenta la colaboración comunitaria para mantener actualizada la información de accesibilidad.
+
 ![image](https://github.com/user-attachments/assets/57f1f23c-e82c-4b98-90d3-96c7c89258e8)
 
 ![image](https://github.com/user-attachments/assets/fb807cff-1e4f-4c28-a1ad-2ba17c281b2d)
