@@ -96,9 +96,21 @@ Este diseño intuitivo facilita la navegación entre las diferentes funcionalida
   <img src="https://github.com/user-attachments/assets/fb807cff-1e4f-4c28-a1ad-2ba17c281b2d" alt="Menú de Navegación" width="300">
 </p>
 
+---
 
+### Visualización e Interacción con Obstáculos en el Mapa
 
-![image](https://github.com/user-attachments/assets/45c39cff-84bb-4728-accb-bff6d4240630)
+En esta captura se muestra cómo la aplicación **Senderos Seguros** resalta los obstáculos directamente en el mapa y permite interactuar con ellos mediante botones específicos:
+
+- **Obstáculo seleccionado**: En este caso, un obstáculo de tipo **"Vereda bloqueada"** aparece señalado en el mapa.
+- **Botones de interacción**:
+  - **Botón Like (👍)**: Permite a los usuarios validar el obstáculo, indicando que sigue presente y es relevante.
+  - **Botón Trash (🗑️)**: Sirve para reportar que el obstáculo ha sido solucionado o ya no es válido.
+    
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/45c39cff-84bb-4728-accb-bff6d4240630" alt="Detalle de Obstáculos en el Mapa" width="300">
+</p>
+
 
 ![image](https://github.com/user-attachments/assets/d46d6681-47f5-4139-8313-a3ffbb5ad127)
 
