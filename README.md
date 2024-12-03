@@ -9,6 +9,10 @@
 ## **Objetivo**
 Fomentar ciudades más inclusivas al conectar tecnología, accesibilidad y comunidad, comenzando con una implementación piloto y escalando a diferentes ciudades.
 
+### Vista de Navegación
+
+La captura muestra la interfaz de navegación de **Senderos Seguros**, destacando una ruta accesible (en azul) con integración a Google Maps. Además, se señalan obstáculos en el recorrido mediante iconos, permitiendo una navegación más segura. Los botones inferiores permiten reportar obstáculos o acceder a alertas en tiempo real.
+
 
 
 ![image](https://github.com/user-attachments/assets/10021dff-f126-4dc8-a460-2dc62e5f9159)
