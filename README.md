@@ -17,6 +17,15 @@ La captura muestra la interfaz de navegación de **Senderos Seguros**, destacand
 
 ![image](https://github.com/user-attachments/assets/10021dff-f126-4dc8-a460-2dc62e5f9159)
 
+### Informe de Obstáculos
+
+La captura muestra el informe semanal de obstáculos detectados en la aplicación. A través de un gráfico circular e interactivo, se representan los siguientes datos:
+- **Obstáculos Activos (98.1%)**: Aquellos que siguen presentes en las rutas.
+- **Obstáculos Inactivos (1.9%)**: Obstáculos que ya han sido resueltas.
+
+Este informe ayuda a los usuarios a comprender la situación actual de accesibilidad en tiempo real.
+
+
 ![image](https://github.com/user-attachments/assets/27ccf619-21c5-4b29-b609-79faea78b169)
 
 ![image](https://github.com/user-attachments/assets/98918897-3270-4b36-82b4-1251460d37f1)
