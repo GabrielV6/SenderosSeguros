@@ -39,6 +39,13 @@ Esta funcionalidad permite identificar los puntos críticos para priorizar mejor
 
 ![image](https://github.com/user-attachments/assets/98918897-3270-4b36-82b4-1251460d37f1)
 
+### Informe de Obstáculos en Palermo
+
+Este gráfico muestra un desglose de los tipos de obstáculos reportados en la zona de **Palermo**:
+- **Vereda bloqueada (40%)**: Principal barrera identificada en el área.
+- **Cierre, Obra y Rampa (20% cada una)**: Otros problemas registrados con menor frecuencia.
+
+La funcionalidad permite priorizar las intervenciones según el tipo de incidencia más recurrente en cada zona.
 
 ![image](https://github.com/user-attachments/assets/cf4878bd-b22e-4096-be99-eefecf5d6bff)
 
